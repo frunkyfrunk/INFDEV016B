@@ -3,7 +3,6 @@
 <b>Software Delivery</b>
 
 <br />
-<br />
 
 <b>Teamleden</b>
 <ul>
@@ -11,6 +10,8 @@
 <li>Mert Öztürk</li>
 <li>Johan Bos</li>
 </ul>
+
+<br />
 
 <b>Github</b>
 <br />
