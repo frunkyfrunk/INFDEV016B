@@ -71,9 +71,9 @@ De technieken die we van plan zijn om te gebruiken zijn:
 
 <b>Taakverdeling</b>
 <br />
-Frank:  Back-end, Front-end, Level
+Frank:  Level
 <br />
-Johan:  Database, Front-end
+Johan:  Level
 <br />
 Mert:   Level
 <br />
