@@ -10,25 +10,18 @@
 <li>Johan Bos</li>
 </ul>
 
-<br />
 
 <b>Github</b>
 <br />
 https://github.com/frunkyfrunk/INFDEV016B
 
-<br />
-
 <b>Gekozen project</b>
 <br />
 Browser-based multiplayer game
 
-<br />
-
 <b>Concept project</b>
 <br />
 nothing...
-
-<br />
 
 <b>Technieken</b>
 <br>
@@ -44,15 +37,11 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>Jenkins</li>
 </ul>
 
-<br />
-
 <b>Mogelijke libraries</b>
 <ul>
 <li>CraftyJS</li>
 <li>CreateJS</li>
 </ul>
-
-<br />
 
 <b>Componenten</b>
 <br />
