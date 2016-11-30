@@ -57,13 +57,14 @@ De technieken die we van plan zijn om te gebruiken zijn:
 
 <b>Componenten</b>
 <br />
-Project
+<i>Project</i>
 <ul>
 <li>Back-end</li>
 <li>Front-end</li>
 <li>Database</li>
+</ul>
 
-Level
+<i>Level</i>
 <ul>
 <li>Opdracht</li>
 <li>Keuzes</li>
