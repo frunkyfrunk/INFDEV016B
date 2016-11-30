@@ -45,9 +45,7 @@ Bij 'Hitman' moet je op basis van een omschrijving de juiste persoon kiezen om t
 Bij 'Geld stelen' doe je een poging tot het bestelen van een persoon.
 <br />
 
-Na het spelen van een activiteit volgt een cooldown periode van 5 minuten.
-
-<br />
+<i>Na het spelen van een activiteit volgt een cooldown periode van 5 minuten.</i>
 
 <b>Technieken</b>
 <br>
