@@ -57,7 +57,19 @@ De technieken die we van plan zijn om te gebruiken zijn:
 
 <b>Componenten</b>
 <br />
-nothing...
+Project
+<ul>
+<li>Back-end</li>
+<li>Front-end</li>
+<li>Database</li>
+
+Level
+<ul>
+<li>Opdracht</li>
+<li>Keuzes</li>
+<li>Volgende rank</li>
+<li>Vorige rank</li>
+</ul>
 
 <br />
 
