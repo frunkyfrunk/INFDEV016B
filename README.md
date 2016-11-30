@@ -70,11 +70,11 @@ De technieken die we van plan zijn om te gebruiken zijn:
 
 <b>Taakverdeling</b>
 <br />
-Frank: Back-end, Front-end, Level
+Frank:  Back-end, Front-end, Level
 <br />
-Johan: Database, Front-end
+Johan:  Database, Front-end
 <br />
-Mert: Level
+Mert:   Level
 <br />
-Ruben: Level
+Ruben:  Level
 <br />
