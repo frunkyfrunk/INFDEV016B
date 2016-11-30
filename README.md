@@ -45,3 +45,4 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <b>Componenten</b>
 <br />
 nothing...
+
