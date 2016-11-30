@@ -39,7 +39,8 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>CSS</li>
 <li>Javascript</li>
 <li>jQuery</li>
-<li>ASP.NET MVC</li>
+<li>Node.js</li>
+<li>Express</li>
 <li>MySQL</li>
 <li>Linux(Ubuntu)</li>
 <li>Jenkins</li>
