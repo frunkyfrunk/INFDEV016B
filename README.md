@@ -74,3 +74,8 @@ De technieken die we van plan zijn om te gebruiken zijn:
 
 <br />
 
+<b>Taakverdeling</b>
+Frank: Back-end, Front-end
+Johan: Database, Front-end
+Mert: -
+
