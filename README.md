@@ -10,7 +10,6 @@
 <li>Johan Bos</li>
 </ul>
 
-
 <b>Github</b>
 <br />
 https://github.com/frunkyfrunk/INFDEV016B
