@@ -14,13 +14,19 @@
 <br />
 https://github.com/frunkyfrunk/INFDEV016B
 
+<br />
+
 <b>Gekozen project</b>
 <br />
 Browser-based multiplayer game
 
+<br />
+
 <b>Concept project</b>
 <br />
-nothing...
+Maffia game waarin de speler een nieuw lid is van de maffia en opdrachten moet uitvoeren. Door bepaalde keuzes te maken in het spel komt de speler hoger in rank, totdat hij uiteindelijk de baas is. Bij het maken van verkeerde keuzes kan de speler in rank degraderen.
+
+<br />
 
 <b>Technieken</b>
 <br>
@@ -36,13 +42,19 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>Jenkins</li>
 </ul>
 
+<br />
+
 <b>Mogelijke libraries</b>
 <ul>
 <li>CraftyJS</li>
 <li>CreateJS</li>
 </ul>
 
+<br />
+
 <b>Componenten</b>
 <br />
 nothing...
+
+<br />
 
