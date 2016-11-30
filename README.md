@@ -33,7 +33,7 @@ Maffia game waarin de speler een nieuw lid is van de maffia. De speler kan de vo
 <li>Misdaad plegen</li>
 <li>Gokken(hoger of lager)</li>
 <li>Hitman</li>
-<li>?</li>
+<li>Geld stelen</li>
 </ul>
 
 Bij 'Misdaad plegen' kun je op basis van risico een misdaad kiezen. Een lager risico levert minder op dan een groter risico.
@@ -42,7 +42,7 @@ Bij 'Gokken' speel je het spel 'Hoger Lager', je kiest of de getrokken kaart hog
 <br />
 Bij 'Hitman' moet je op basis van een omschrijving de juiste persoon kiezen om te vermoorden.
 <br />
-
+Bij 'Geld stelen' doe je een poging tot het bestelen van een persoon.
 <br />
 
 Na het spelen van een activiteit volgt een cooldown periode van 5 minuten.
