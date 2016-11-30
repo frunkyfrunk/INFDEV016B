@@ -29,6 +29,7 @@ Browser-based multiplayer game
 <b>Concept project</b>
 <br />
 Maffia game waarin de speler een nieuw lid is van de maffia en opdrachten moet uitvoeren. Door bepaalde keuzes te maken in het spel komt de speler hoger in rank, totdat hij uiteindelijk de baas is. Bij het maken van verkeerde keuzes kan de speler in rank degraderen.
+Elke speler heeft naast een rank ook een geldbedrag en wapens, en kan van andere spelers stelen. Welk bedrag je kunt stelen wordt bepaald op basis van welke rank je bent.
 
 <br />
 
