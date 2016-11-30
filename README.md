@@ -28,8 +28,20 @@ Browser-based multiplayer game
 
 <b>Concept project</b>
 <br />
-Maffia game waarin de speler een nieuw lid is van de maffia en opdrachten moet uitvoeren. Door bepaalde keuzes te maken in het spel komt de speler hoger in rank, totdat hij uiteindelijk de baas is. Bij het maken van verkeerde keuzes kan de speler in rank degraderen.
-Elke speler heeft naast een rank ook een geldbedrag en wapens. Ook kan je van andere spelers geld stelen. Welk bedrag je kunt stelen wordt bepaald op basis van rank. Na het stelen volgt een cooldown-periode van 10 minuten.
+Maffia game waarin de speler een nieuw lid is van de maffia. De speler kan de volgende activiteiten uitvoeren:
+<ul>
+<li>Misdaad plegen</li>
+<li>Gokken(hoger of lager)</li>
+<li>Hitman</li>
+<li>?</li>
+</ul>
+
+Bij 'Misdaad plegen' kun je op basis van risico een misdaad kiezen. Een lager risico levert minder op dan een groter risico.
+Bij 'Gokken' speel je het spel 'Hoger Lager', je kiest of de getrokken kaart hoger of lager zal zijn dan een bepaald getal.
+Bij 'Hitman' moet je op basis van een omschrijving de juiste persoon kiezen om te vermoorden.
+
+
+Na het spelen van een activiteit volgt een cooldown periode van 5 minuten.
 
 <br />
 
