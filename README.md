@@ -100,8 +100,8 @@ Ruben:  Level
 <b>Taken</b>
 <ul>
 <li>Skeleton voor HTML pagina en Javascript</li>
-<li>Highscore lijst</li>
-<li>Login</li>
-<li></li>
+<li>Login/Registreren</li>
+<li>Hoofdmenu</li>
+<li>Scorelijst</li>
 
 </ul>
