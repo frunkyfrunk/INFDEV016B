@@ -37,9 +37,13 @@ Maffia game waarin de speler een nieuw lid is van de maffia. De speler kan de vo
 </ul>
 
 Bij 'Misdaad plegen' kun je op basis van risico een misdaad kiezen. Een lager risico levert minder op dan een groter risico.
+<br />
 Bij 'Gokken' speel je het spel 'Hoger Lager', je kiest of de getrokken kaart hoger of lager zal zijn dan een bepaald getal.
+<br />
 Bij 'Hitman' moet je op basis van een omschrijving de juiste persoon kiezen om te vermoorden.
+<br />
 
+<br />
 
 Na het spelen van een activiteit volgt een cooldown periode van 5 minuten.
 
