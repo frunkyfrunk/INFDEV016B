@@ -9,6 +9,7 @@
 <li>Frank Verhagen</li>
 <li>Mert Öztürk</li>
 <li>Johan Bos</li>
+<li>Ruben van Erk</li>
 </ul>
 
 <br />
@@ -38,20 +39,12 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>HTML</li>
 <li>CSS</li>
 <li>Javascript</li>
-<li>jQuery</li>
-<li>Node.js</li>
-<li>Express</li>
-<li>MySQL</li>
-<li>Linux(Ubuntu)</li>
-<li>Jenkins</li>
-</ul>
-
-<br />
-
-<b>Mogelijke libraries</b>
-<ul>
-<li>CraftyJS</li>
-<li>CreateJS</li>
+<li>jQuery 3.1.1</li>
+<li>Node.js 6.9.1</li>
+<li>npm 3.1.8</li>
+<li>Express 4.14.0</li>
+<li>Ubuntu 16.04 LTS</li>
+<li>Jenkins 2.33</li>
 </ul>
 
 <br />
@@ -82,4 +75,6 @@ Frank: Back-end, Front-end
 Johan: Database, Front-end
 <br />
 Mert: -
+<br />
+Ruben: -
 <br />
