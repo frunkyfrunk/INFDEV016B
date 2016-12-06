@@ -54,6 +54,7 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>HTML</li>
 <li>CSS</li>
 <li>Javascript</li>
+<li>Crafty JS 0.7.1</li>
 <li>jQuery 3.1.1</li>
 <li>Node.js 6.9.1</li>
 <li>npm 3.1.8</li>
@@ -87,7 +88,7 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <br />
 Frank:  Level
 <br />
-Johan:  Level
+Johan:  Hitman
 <br />
 Mert:   Level
 <br />
