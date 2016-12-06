@@ -1,0 +1,23 @@
+canvas {
+	margin: 0 0 0 0;
+}
+
+#GameTitle {
+	text-align: center;
+	margin: 0 0 0 0;
+	padding-bottom: 2px;
+}
+
+#game{
+	overflow: hidden;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	width: 100% !important;
+	border: 1px solid #444444;
+	margin-bottom: 15px;
+	margin-top: 5px;
+}
+
+#gameContainer{
+	padding: 0 0 0 0 !important;
+}
