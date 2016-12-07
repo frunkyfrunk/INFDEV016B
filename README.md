@@ -58,7 +58,8 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>jQuery 3.1.1</li>
 <li>Node.js 6.9.1</li>
 <li>npm 3.1.8</li>
-<li>Express 4.14.0</li>
+<li>Passport 0.3.2</li>
+<li>MongoDB 3.2.10</li>
 <li>Ubuntu 16.04 LTS</li>
 <li>Jenkins 2.33</li>
 </ul>
@@ -88,7 +89,7 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <br />
 Frank:  Level
 <br />
-Johan:  Hitman
+Johan:  Hitman, Login systeem
 <br />
 Mert:   Level
 <br />
