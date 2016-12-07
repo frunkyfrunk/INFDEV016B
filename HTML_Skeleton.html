@@ -58,13 +58,13 @@
 	
 	<!-- Begin of scripts -->
 	<script>
-		Crafty.init(window.innerWidth, window.innerHeight*0.75, document.getElementById('game'));
+		Crafty.init(window.innerWidth, window.innerHeight, document.getElementById('game'));
 		/* Block */
 		Crafty.e('2D, Canvas, Color, Twoway, Gravity')
 		  .attr({x: 0, y: 0, w:100, h: 100})
 		  .color('#00F')
 		  .twoway(200)
-		  .gravity('Floor');
+		  .gravity('Floor')
 		
 	     /* Floors */
 		 Crafty.e('Floor, 2D, Canvas, Color')
