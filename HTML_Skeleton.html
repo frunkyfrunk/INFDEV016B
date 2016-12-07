@@ -52,13 +52,9 @@
       </div>
     </div>
 	
-    <footer class="container-fluid text-center">
-      <p>Footer Text</p>
-    </footer>
-	
 	<!-- Begin of scripts -->
 	<script>
-		Crafty.init(window.innerWidth-100, window.innerHeight, document.getElementById('game'));
+		Crafty.init(window.innerWidth-100, window.innerHeight-100, document.getElementById('game'));
 		/* Block */
 		Crafty.e('2D, Canvas, Color, Twoway, Gravity')
 		  .attr({x: 0, y: 0, w:100, h: 100})
