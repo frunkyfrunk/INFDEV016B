@@ -39,7 +39,7 @@
 	
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-10">
+        <div class="col-sm-12 text-center">
           <h2 id="GameTitle">[Enter name of game]</h2>
         </div>
       </div>
@@ -58,7 +58,7 @@
 	
 	<!-- Begin of scripts -->
 	<script>
-		Crafty.init(1100,500, document.getElementById('game'));
+		Crafty.init(window.innerWidth, window.innerHeight*0.75, document.getElementById('game'));
 		/* Block */
 		Crafty.e('2D, Canvas, Color, Twoway, Gravity')
 		  .attr({x: 0, y: 0, w:100, h: 100})
