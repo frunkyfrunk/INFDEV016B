@@ -14,11 +14,10 @@ http.listen(3000, function () {
 
 io.on('connection', function(socket){
   console.log('a user connected');
-  socket.id = Math.random();
-  socket.x = 0;
-  socket.y = 0;
-  SOCKET_LIST(socket_id) = socket;
   
+  socket.on('userdata', function(data){
+	useDatabase(insertUserDetails(data));	
+  });
   
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -26,4 +25,40 @@ io.on('connection', function(socket){
   
 });
 
-var SOCKET_LIST = ();
+
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
+  // Connection URL
+var url = 'mongodb://localhost:27017/DEV016B';
+// Use connect method to connect to the server
+
+
+function useDatabase(mongoQuery) {
+	MongoClient.connect(url, function(err, db) {
+		if (err) {
+			console.log('Unable to connect to the mongoDB server. Error:', err);
+		}
+		else{
+			console.log("Connected from the mongoDB server");
+		mongoQuery(db,function(){			
+			db.close();
+			console.log("Disconnected from the mongoDB server");
+		});	
+		}			
+})};
+
+function insertUserDetails(data){
+	var insertDocument = function(db, callback) {
+		db.collection('user').insertOne({
+			"username" : data.username,
+			"password" : data.password
+		},function(err, result) {
+			assert.equal(err, null);
+			console.log("Inserted a user into the user collection.");
+			callback();
+			});
+		};
+	return insertDocument;
+};
+
+

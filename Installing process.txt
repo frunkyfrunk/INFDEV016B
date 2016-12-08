@@ -6,4 +6,15 @@ Create new directory.
 Open NodeJS in directory and use the command "npm init"
 In NodeJS install Express module by using command "npm install express"
 In NodeJS install Socket.io module by using command "npm install socket.io"
+In NodeJS install MongoDB module by using command "npm install mongodb --save"
 *In NodeJS install CraftyJs module by using command "npm install craftyjs"?
+*In NodeJS install bcrypt module by using command "npm install bcrypt"?
+
+in MongoDB create a new database "DEV016B"
+use DEV016B
+create collection "user" by -> db.createCollection("user")
+create users to log in with -> 
+db.user.insert({username:"Frunk",password:"Junk"})
+db.user.insert({username:"Mert",password:"Killer"})
+
+
