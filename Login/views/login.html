@@ -1,23 +1,58 @@
 <html>
+	<head>
+	<title>Login</title>
+	<style>
+		body{
+			vertical-align: middle
+		}
+	
+		.loginTable{
+			margin: 0px auto;
+			padding-top: 40px;
+		}
+		
+		.login{
+			margin-top: 15%;
+			background: rgb(212, 19, 5);
+			color: white;
+			width: 400px;
+			margin-left: 35%;
+			height: 200px;
+		}
+		
+		.login label{
+			color: white;
+		}
+
+	
+	</style>
+	</head>
 	<body>
 		<form action="/login" method="post">
-		<div>
-			<table>
+		<div class="login">
+			<table class="loginTable">
 				<tr>
-					<td><label>Gebruikersnaam:</label></td>
-					<td><input type="text" name="username" /></td>
-				</tr>
-				<tr>
-					<td><label>Wachtwoord:</label></td>
-					<td><input type="password" name="password" /></td>
+					<td>
+						<label>Gebruikersnaam:</label>
+						<br />
+						<input type="text" name="username" />
+					</td>
 				</tr>
 				<tr>
 					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<label>Wachtwoord:</label>
+						<br />
+						<input type="password" name="password" />
+					</td>
+				</tr>
+				<tr>
 					<td></td>
 				</tr>
 				<tr>
-					<td><input type="submit" value="Submit" /></td>
-					<td></td>
+					<td><input type="submit" value="Inloggen" /></td>
 				</tr>
 			</table>
 			</div>

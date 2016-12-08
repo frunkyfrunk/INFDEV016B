@@ -31,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
+//Passport init
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -43,15 +44,17 @@ app.post('/login',
 );
 
 //Login handlers
+//IF login failed do this
 app.get('/loginFailure', function(req, res, next) {
   res.send('Failed to authenticate');
 });
 
+//If login succeeded do this
 app.get('/loginSuccess', function(req, res, next) {
   res.send('Successfully authenticated');
 });
 
-//Passport
+//Passport Serializer
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -102,6 +105,7 @@ var UserDetail = new Schema({
     });
 var UserDetails = mongoose.model('login', UserDetail);
 
+//Passport Strategy
 passport.use(new LocalStrategy(function(username, password, done) {
   process.nextTick(function() {
     UserDetails.findOne({
@@ -123,6 +127,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
     });
   });
 }));
+
 
 
 module.exports = app;
