@@ -30,10 +30,25 @@ Password: <input type="password" id="password"><br>
 	var usernameText = document.getElementById("username");
 	var passwordText = document.getElementById("password");
 	var registerButton = document.getElementById("register");
+	var signInButton = document.getElementById("signIn");
 	
 	registerButton.onclick = function(){
-	socket.emit('userdata',{username:usernameText.value, password:passwordText.value});
+		socket.emit('registerData',{username:usernameText.value, password:passwordText.value});
 	};
+	
+	signInButton.onclick = function(){
+		socket.emit('signInData',{username:usernameText.value, password:passwordText.value});
+	};
+	
+	socket.on('signInResponse', function(data){
+	console.log(data.success);
+		if(data.success){
+		alert("sign in Successful");
+		} else {
+		alert("sign in Unsuccessful");
+		}
+	});
+	
 	</script>
 	</body>
 </html>

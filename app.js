@@ -14,8 +14,20 @@ http.listen(3000, function () {
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  // socket.id = Math.random();
+  // SOCKET_LIST[socket.id] = socket;
   
-  socket.on('userdata', function(data){
+  socket.on('signInData',function(data){
+	  if(data.username == "mert"){
+		socket.emit('signInResponse',{success:true});
+		useDatabase(searchUserDetails(data));	
+	  } else {
+		socket.emit('signInResponse',{success:false});
+	  }
+	  
+  });
+  
+  socket.on('registerData', function(data){
 	useDatabase(insertUserDetails(data));	
   });
   
@@ -39,7 +51,7 @@ function useDatabase(mongoQuery) {
 			console.log('Unable to connect to the mongoDB server. Error:', err);
 		}
 		else{
-			console.log("Connected from the mongoDB server");
+			console.log("Connected to the mongoDB server");
 		mongoQuery(db,function(){			
 			db.close();
 			console.log("Disconnected from the mongoDB server");
@@ -61,4 +73,15 @@ function insertUserDetails(data){
 	return insertDocument;
 };
 
-
+function searchUserDetails(data){
+	var findUser = function(db, callback) {
+		var cursor = db.collection('user').find( { "username": "Frunk" },
+		function(err, result) {
+			assert.equal(err, null);
+			callback();
+			});
+			console.log(cursor.username);
+		};
+		
+		return findUser;
+};
