@@ -49,6 +49,16 @@ Password: <input type="password" id="password"><br>
 		}
 	});
 	
+	socket.on('registerResponse', function(data){
+	console.log(data.success);
+		if(data.success){
+		alert("Register Successful");
+		} else {
+		alert("Register Unsuccessful");
+		}
+	});
+	
+	
 	</script>
 	</body>
 </html>
