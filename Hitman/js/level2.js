@@ -32,9 +32,9 @@
 			Crafty.audio.add("shoot", "../Hitman/sounds/gun.mp3");
 
 			//Wrong Guy	
-			Crafty.sprite(81, 299, '../Hitman/img/woman3.png', {s1:[0,0]});
+			Crafty.sprite(95, 252, '../Hitman/img/woman4.png', {s1:[0,0]});
 			var suspect1 = Crafty.e('2D, Canvas, s1, Mouse')
-				.attr({x: 65, y: 253, w: 38, h: 120})
+				.attr({x: 69, y: 240, w: 47, h: 125})
 				.bind('Click', function(MouseEvent){
 					Crafty.audio.play("shoot");
 					
@@ -45,9 +45,9 @@
 				});
 
 			//Right Guy
-			Crafty.sprite(81, 299, '../Hitman/img/woman4.png', {s2:[0,0]});
+			Crafty.sprite(95, 252, '../Hitman/img/woman3.png', {s2:[0,0]});
 			var suspect2 = Crafty.e('2D, Canvas, s2, Mouse')
-				.attr({x: 390, y: 270, w:43, h:160})
+				.attr({x: 415, y: 175, w:56, h:150})
 				.bind('Click', function(MouseEvent){
 					Crafty.audio.play("shoot");					
 
@@ -59,7 +59,7 @@
 			//Wrong Guy	
 			Crafty.sprite(81, 299, '../Hitman/img/man3.png', {s3:[0,0]});
 			var suspect3 = Crafty.e('2D, Canvas, s3, Mouse')
-				.attr({x: 910, y: 320, w: 90, h: 330})
+				.attr({x: 910, y: 320, w: 90, h: 310})
 				.bind('Click', function(MouseEvent){
 					Crafty.audio.play("shoot");
 					
