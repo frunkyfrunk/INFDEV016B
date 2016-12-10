@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Game Frank</title>
+	<script src="js/crafty.js"></script>
+	<script src="js/crafty-min.js"></script>
+	
+  </head>
+  <body>
+  
+	
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <h2 id="GameTitle">[Enter name of game]</h2>
+        </div>
+      </div>
+	  
+      <div class="row">
+        <div class="col-sm-12" id="Game">
+          <div id="game">
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<!-- Begin of scripts -->
+	<script>
+        
+		Crafty.init(1500, 446, document.getElementById('game'));
+		Crafty.background('#FFFFFF url(bg.png) repeat');
+		/* Block */
+		Crafty.sprite(472,99, "bullet.png", {
+    Bullet: [0,0]
+});
+        
+        	Crafty.sprite(472,99, "gunfire.png", {
+    Gunfire: [150,150]
+});
+        Crafty.sprite(350,350, "enemy.png", {
+    EnemySprite: [0,0]
+});
+		Crafty.sprite(650,650, "gangster.png", {
+    PlayerSprite: [0,0]
+});
+		Crafty.sprite(891, 150,"tram.png", {
+		tram: [0,0]
+		});
+		var tram = spawnTram(20, 129);
+			
+		tram.bind("Move", function(oldPosition) {
+
+
+		  if(tram.x > 1000){
+              tram = spawnTram(-1000, 129);
+		  }
+		  });
+        		 
+        var direction = 1; //direction 1 = right, 0 is left
+		var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation,GroundAttacher')
+		  .attr({x: 10, y: 440, w:150, h: 150})
+		  .twoway(200)
+		  .gravity('Floor')
+        .gravityConst(500);
+		   player.reel('PlayerRunning', 1000, 0, 0, 5) // setup animation
+           		  var gunfire = getgunfire(player, direction);
+
+		  player.bind('KeyDown', function(e) {
+    if(e.key == Crafty.keys.SPACE) {
+        shoot(player, direction, gunfire)
+    } 
+          });
+		  player.bind("Move", function(oldPosition) {
+              
+              
+                 var posx = player.x;
+                 if(direction == -1){
+                  posx = posx -320;
+                                       gunfire.flip("X")
+
+              } else {
+                                    gunfire.unflip("X")
+
+              }
+                 gunfire.attr({x: posx, y: player.y-27})
+                                                       
+              if(oldPosition._x > player.x && direction == 1){
+                  direction = -1;
+                  player.flip("X");
+              } 
+              if(oldPosition._x < player.x && direction == -1){
+                  direction = 1;
+                  player.unflip("X");
+              }
+              
+		  if(!player.isPlaying() && oldPosition._x != player.x){
+              
+		  		  player.animate('PlayerRunning', 0.5, 0, 1, 6) // setup animation
+		  }
+          
+});
+        var interval = 30;
+        var enemiesalive = 0;
+        var myVar = setInterval(myTimer, interval);
+function myTimer() {
+    if(enemiesalive < 1){
+        if(interval == 30){
+            interval = 10000;
+        }
+               var x = Math.floor((Math.random() * 90) + 800);
+        SpawnEnemy(x, 440);
+    }
+}
+        
+        function SpawnEnemy(x, y){
+            var enemydirection = -1;
+            enemiesalive++;
+            var enemy = Crafty.e('2D, DOM, EnemySprite, Twoway, Gravity,SpriteAnimation')
+		  .attr({x: x, y: y, w:150, h: 150})
+		  .gravity('Floor')
+        .gravityConst(1000)
+        .reel('EnemyRunning', 1000, 0, 0, 5); // setup animation
+                        		  var enemygunfire = getgunfire(enemy, enemydirection);
+
+         
+        enemy.bind("EnterFrame", function(eventData) {
+                        
+            var posx = enemy.x+10;
+
+            if(enemy.x > player.x){
+                    enemydirection = -1;
+                                  posx = posx -340;
+
+                                       enemygunfire.flip("X")
+
+                                              enemy.flip("X");
+
+        } else {
+                                                                enemydirection = 1;
+                                                enemygunfire.unflip("X")
+
+         
+            enemy.unflip("X");
+        }
+            if(eventData.frame % 40 == 0 && difference(player.y, enemy.y) < 200 ){
+                shoot(enemy,enemydirection, enemygunfire)
+            }
+var distance = difference(player.x, enemy.x);
+if(distance < 250){
+                enemy.velocity().x = 0;
+            } 
+            else {
+            }
+            if(enemy.x > player.x && distance > 250){
+                enemy.velocity().x = -70;
+            } else if(enemy.x < player.x && distance > 250){
+                                enemy.velocity().x = 70;
+
+            }
+                 
+                 enemygunfire.attr({x: posx, y: enemy.y-28})
+
+		  });
+            enemy.bind("Move", function(oldPosition){
+                       if(!enemy.isPlaying() && oldPosition._x != enemy.x){
+            		  		  enemy.animate('EnemyRunning', 0.5, 0, 1, 6); // setup animation
+                           
+              
+                 
+		  }
+             
+                   });
+
+        }
+        function difference (a, b){ return Math.abs(a - b)};
+        
+	     /* Floors */
+		 Crafty.e('Floor, 2D, Canvas, Color')
+		  .attr({x: 0, y: 440, w: 1500, h: 10})
+		  
+		  function spawnTram(disx, disy){
+              var tramfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion, Floor')
+		  .attr({x: disx+55, y: disy+57, w: 770, h: 10})
+              tramfloor.velocity().x = 80;
+              var tram = Crafty.e('2D, Canvas, tram, Motion')
+		  .attr({x: disx, y: disy})
+		var speed = tram.velocity(); //returns the speed object
+			speed.x = 80;   // set the speed in the x direction
+              return tram;
+          }
+         
+                   
+                   Crafty.audio.add("shot", [
+"shot.wav"
+]);
+        
+        function getgunfire(entity, firedirection){
+            var gunfir = Crafty.e('2D, Canvas, Gunfire, SpriteAnimation, Motion')
+                          		   gunfir.reel('Shot', 300, 0, 0, 2) // setup animation
+           
+            return gunfir;
+                                   
+        }
+			 function shoot(entity,bulletdirection, gunfire){
+                 var disx = entity.x;
+                 var disy = entity.y;
+                 
+                 
+
+                 Crafty.audio.play("shot")
+                 		  
+
+                 gunfire.animate('Shot', 0.5, 0, 1, 1);
+
+                 
+                 var bullet = Crafty.e('2D, Canvas, Bullet, Motion');
+                 
+                 if(bulletdirection == 1){
+		  disx = disx-300;
+                 
+                              bullet.flip("X")
+                              
+                          }  else{
+                              		  disx = disx+30;
+
+                          }
+                 bullet.attr({x: disx, y: disy+44, w:400, h: 60});
+		var speed = bullet.velocity(); //returns the speed object
+			speed.x = 800 *bulletdirection;   // set the speed in the x direction
+                 
+             }
+		  
+	</script>
+	<!-- End of scripts -->
+	
+  </body>
+</html>
