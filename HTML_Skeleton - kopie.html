@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Game Frank</title>
+	<script src="js/crafty.js"></script>
+	<script src="js/crafty-min.js"></script>
+	
+  </head>
+  <body>
+  
+	
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <h2 id="GameTitle">[Enter name of game]</h2>
+        </div>
+      </div>
+	  
+      <div class="row">
+        <div class="col-sm-12" id="Game">
+          <div id="game">
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<!-- Begin of scripts -->
+	<script>
+        
+		Crafty.init(1000, 800, document.getElementById('game'));
+		Crafty.background('#FFFFFF url(bg.png) no-repeat');
+		/* Block */
+		Crafty.sprite(472,99, "bullet.png", {
+    Bullet: [0,0]
+});
+        
+        	Crafty.sprite(472,99, "gunfire.png", {
+    Gunfire: [150,150]
+});
+        Crafty.sprite(350,350, "enemy.png", {
+    EnemySprite: [0,0]
+});
+		Crafty.sprite(650,650, "gangster.png", {
+    PlayerSprite: [0,0]
+});
+		Crafty.sprite(891, 150,"tram.png", {
+		tram: [0,0]
+		});
+		var tram = spawnTram(20, 129);
+			
+		tram.bind("Move", function(oldPosition) {
+
+
+		  if(tram.x > 1000){
+              tram = spawnTram(-1000, 129);
+		  }
+		  });
+        		 var gunfire = Crafty.e('2D, Canvas, Gunfire, SpriteAnimation, Motion')
+        var direction = 1; //direction 1 = right, 0 is left
+		var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation')
+		  .attr({x: 10, y: 440, w:150, h: 150})
+		  .twoway(200)
+		  .gravity('Floor')
+        .gravityConst(500);
+		   player.reel('PlayerRunning', 1000, 0, 0, 5) // setup animation
+		  player.bind('KeyDown', function(e) {
+    if(e.key == Crafty.keys.SPACE) {
+        shoot(player._x,player._y)
+    } 
+          });
+		  
+		  player.bind("Move", function(oldPosition) {
+              if(oldPosition._x > player.x && direction == 1){
+                  direction = -1;
+                  player.flip("X");
+              } 
+              if(oldPosition._x < player.x && direction == -1){
+                  direction = 1;
+                  player.unflip("X");
+              }
+              var x = player.x;
+              if(direction == -1){
+                  x = x -320;
+              }
+              gunfire.attr({x: x, y: player.y-27})
+		  if(!player.isPlaying() && oldPosition._x != player.x){
+              
+		  		  player.animate('PlayerRunning', 0.5, 0, 1, 6) // setup animation
+		  }
+          
+});
+        
+        var enemiesalive = 0;
+        var myVar = setInterval(myTimer, 10000);
+function myTimer() {
+    if(enemiesalive < 2){
+               var x = Math.floor((Math.random() * 90) + 800);
+
+        SpawnEnemy(x, 440);
+    }
+}
+        
+        function SpawnEnemy(x, y){
+            enemiesalive++;
+            var enemy = Crafty.e('2D, DOM, EnemySprite, Twoway, Gravity,SpriteAnimation')
+		  .attr({x: x, y: y, w:150, h: 150})
+		  .gravity('Floor')
+        .gravityConst(1000)
+        .reel('EnemyRunning', 1000, 0, 0, 5) // setup animation
+         .bind("Move", function(oldPosition){
+                       if(!enemy.isPlaying() && oldPosition._x != enemy.x){
+              
+            		  		  enemy.animate('EnemyRunning', 0.5, 0, 1, 6); // setup animation
+                  
+
+		  }
+                   });
+        enemy.bind("EnterFrame", function(oldPosition) {
+var difference = Math.abs(player.x - enemy.x);
+if(difference < 250){
+                enemy.velocity().x = 0;
+            } 
+            else {
+            }
+            if(enemy.x > player.x && difference > 250){
+                enemy.velocity().x = -70;
+            } else if(enemy.x < player.x && difference > 250){
+                                enemy.velocity().x = 70;
+
+            }
+
+if(enemy.x > player.x){
+                                              enemy.flip("X");
+
+        } else {
+                                          enemy.unflip("X");
+            
+             
+        
+
+
+
+        }
+		  });
+        }
+        
+	     /* Floors */
+		 Crafty.e('Floor, 2D, Canvas, Color')
+		  .attr({x: 0, y: 440, w: 1000, h: 10})
+		  
+		  function spawnTram(disx, disy){
+              var tramfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion')
+		  .attr({x: disx+55, y: disy+57, w: 770, h: 10})
+              tramfloor.velocity().x = 80;
+              var tram = Crafty.e('2D, Canvas, tram, Motion')
+		  .attr({x: disx, y: disy})
+		var speed = tram.velocity(); //returns the speed object
+			speed.x = 80;   // set the speed in the x direction
+              return tram;
+          }
+         		   gunfire.reel('Shot', 300, 0, 0, 2) // setup animation
+         
+                   
+                   Crafty.audio.add("shot", [
+"shot.wav"
+]);
+			 function shoot(disx, disy){
+                 Crafty.audio.play("shot")
+                 		  
+
+if(direction == 1){
+                     disx = disx + 108;
+                                      gunfire.unflip("X");
+    
+                 } else {
+                                      gunfire.flip("X");
+                     
+                 }
+                 gunfire.animate('Shot', 0.5, 0, 1, 1);
+                 
+                 var bullet = Crafty.e('2D, Canvas, Bullet, Motion')
+                 
+		  .attr({x: disx, y: disy+44, w:400, h: 70})
+		var speed = bullet.velocity(); //returns the speed object
+			speed.x = 800 *direction;   // set the speed in the x direction
+                 
+             }
+		  
+	</script>
+	<!-- End of scripts -->
+	
+  </body>
+</html>
