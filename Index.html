@@ -57,7 +57,8 @@
 		  });
         		 
         var direction = 1; //direction 1 = right, 0 is left
-		var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation,GroundAttacher')
+        var playerhealth = 5;
+		var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation,GroundAttacher, Collision')
 		  .attr({x: 10, y: 440, w:150, h: 150})
 		  .twoway(200)
 		  .gravity('Floor')
@@ -67,9 +68,17 @@
 
 		  player.bind('KeyDown', function(e) {
     if(e.key == Crafty.keys.SPACE) {
-        shoot(player, direction, gunfire)
+        shoot(player, direction, gunfire, "Enemy")
     } 
           });
+        player.checkHits('Player')
+    player.bind("HitOn", function(hitData) {
+         playerhealth--;
+            if(playerhealth < 1 ){
+            player.destroy();
+            }
+        this.resetHitChecks('Player'); // fire the HitOn event in the next frame also, if the collision is still active.
+    })
 		  player.bind("Move", function(oldPosition) {
               
               
@@ -99,27 +108,37 @@
 		  }
           
 });
-        var interval = 30;
+        var interval = 5000;
         var enemiesalive = 0;
         var myVar = setInterval(myTimer, interval);
 function myTimer() {
-    if(enemiesalive < 1){
-        if(interval == 30){
-            interval = 10000;
-        }
+    if(enemiesalive < 5){
+        
                var x = Math.floor((Math.random() * 90) + 800);
-        SpawnEnemy(x, 440);
+                       var y = Math.floor((Math.random() * 180) + 100);
+
+        SpawnEnemy(x, y);
     }
 }
         
         function SpawnEnemy(x, y){
             var enemydirection = -1;
+            var health = 3;
             enemiesalive++;
-            var enemy = Crafty.e('2D, DOM, EnemySprite, Twoway, Gravity,SpriteAnimation')
+            var enemy = Crafty.e('2D, DOM, EnemySprite, Twoway, Gravity,SpriteAnimation, Collision')
 		  .attr({x: x, y: y, w:150, h: 150})
 		  .gravity('Floor')
         .gravityConst(1000)
-        .reel('EnemyRunning', 1000, 0, 0, 5); // setup animation
+        .reel('EnemyRunning', 1000, 0, 0, 5);
+            enemy.checkHits('Enemy');
+    enemy.bind("HitOn", function(hitData) {
+        health--;
+        if(health == 0){
+            enemy.destroy();
+            enemiesalive--;
+        }
+        this.resetHitChecks('Enemy'); // fire the HitOn event in the next frame also, if the collision is still active.
+    }); // setup animation
                         		  var enemygunfire = getgunfire(enemy, enemydirection);
 
          
@@ -143,7 +162,7 @@ function myTimer() {
             enemy.unflip("X");
         }
             if(eventData.frame % 40 == 0 && difference(player.y, enemy.y) < 200 ){
-                shoot(enemy,enemydirection, enemygunfire)
+                shoot(enemy,enemydirection, enemygunfire, "Player")
             }
 var distance = difference(player.x, enemy.x);
 if(distance < 250){
@@ -201,19 +220,28 @@ if(distance < 250){
             return gunfir;
                                    
         }
-			 function shoot(entity,bulletdirection, gunfire){
+			 function shoot(entity,bulletdirection, gunfire, victim){
                  var disx = entity.x;
                  var disy = entity.y;
                  
-                 
+                 var hitcount = 0;
 
                  Crafty.audio.play("shot")
                  		  
 
                  gunfire.animate('Shot', 0.5, 0, 1, 1);
-
+                 if(entity)
                  
-                 var bullet = Crafty.e('2D, Canvas, Bullet, Motion');
+                 var bullet = Crafty.e('2D, Canvas, Bullet, Motion, Collision')
+                                  .ignoreHits('Bullet')
+
+                 .checkHits(victim+'Sprite')
+    .bind("HitOn", function(hitData) {
+        this.resetHitChecks(victim+'Sprite'); // fire the HitOn event in the next frame also, if the collision is still active.
+    })
+
+                                  bullet.addComponent(victim);
+
                  
                  if(bulletdirection == 1){
 		  disx = disx-300;
