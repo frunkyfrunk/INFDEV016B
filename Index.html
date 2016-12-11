@@ -46,6 +46,7 @@
 		Crafty.sprite(891, 150,"tram.png", {
 		tram: [0,0]
 		});
+        
 		var tram = spawnTram(20, 129);
 			
 		tram.bind("Move", function(oldPosition) {
@@ -62,23 +63,56 @@
 		  .attr({x: 10, y: 440, w:150, h: 150})
 		  .twoway(200)
 		  .gravity('Floor')
-        .gravityConst(500);
+        .gravityConst(2000);
+        var healthbar = gethealthbar(player);
 		   player.reel('PlayerRunning', 1000, 0, 0, 5) // setup animation
            		  var gunfire = getgunfire(player, direction);
+player.bind('Moved', function(evt){
+        if (this.hit('solid')){
+          this[evt.axis] = evt.oldValue;
+        }
+      });
 
 		  player.bind('KeyDown', function(e) {
     if(e.key == Crafty.keys.SPACE) {
         shoot(player, direction, gunfire, "Enemy")
     } 
           });
-        player.checkHits('Player')
-    player.bind("HitOn", function(hitData) {
-         playerhealth--;
-            if(playerhealth < 1 ){
-            player.destroy();
+        player.jumper(1000, ['UP_ARROW', 'W']);
+
+    player.onHit('Player', function(entity){
+                         Crafty.audio.play("auw")
+
+                    playerhealth--;
+        healthbar.attr({w: playerhealth*20});
+        var color = redYellowGreen(0, 100,playerhealth*20);
+        healthbar.color(color);
+        if(playerhealth < 1 ){
+        this.destroy();
             }
-        this.resetHitChecks('Player'); // fire the HitOn event in the next frame also, if the collision is still active.
-    })
+    
+                    entity[0].obj.destroy();
+    });
+    function redYellowGreen(min, max, value)
+{
+	var green_max = 220;
+	var red_max = 220;
+	var red = 0;
+	var green = 0;
+	var blue = 0;
+
+	if (value < max/2)
+	{
+		red = red_max;
+		green = Math.round((value/(max/2))*green_max);
+	}
+	else
+	{
+		green = green_max;
+		red = Math.round((1-((value-(max/2))/(max/2)))*red_max);
+	}
+	return 'rgb('+red+','+green+','+blue+')';
+}
 		  player.bind("Move", function(oldPosition) {
               
               
@@ -117,9 +151,22 @@ function myTimer() {
                var x = Math.floor((Math.random() * 90) + 800);
                        var y = Math.floor((Math.random() * 180) + 100);
 
-        SpawnEnemy(x, y);
+        //SpawnEnemy(x, y);
     }
 }
+                SpawnEnemy(800, 300);
+
+        function gethealthbar(entity){
+            var bar = Crafty.e("2D, DOM, Color, right")
+      .attr({x: entity.x, y: entity.y, w: 100, h: 10})
+      .color('green');
+            entity.bind('Move', function(evt){
+                
+                bar.attr({x: entity.x+30, y: entity.y-20})
+                
+            });
+            return bar;
+        }
         
         function SpawnEnemy(x, y){
             var enemydirection = -1;
@@ -131,14 +178,22 @@ function myTimer() {
         .gravityConst(1000)
         .reel('EnemyRunning', 1000, 0, 0, 5);
             enemy.checkHits('Enemy');
-    enemy.bind("HitOn", function(hitData) {
-        health--;
-        if(health == 0){
-            enemy.destroy();
-            enemiesalive--;
-        }
-        this.resetHitChecks('Enemy'); // fire the HitOn event in the next frame also, if the collision is still active.
-    }); // setup animation
+    enemy.onHit('Enemy', function(entity){
+                                 Crafty.audio.play("auw")
+
+                    health--;
+        
+        enemyhealthbar.attr({w: health*20});
+        var color = redYellowGreen(0, 100,health*20);
+        enemyhealthbar.color(color);
+            if(health < 1 ){
+        this.destroy();
+            }
+    
+                    entity[0].obj.destroy();
+    });
+                         var enemyhealthbar = gethealthbar(enemy);
+
                         		  var enemygunfire = getgunfire(enemy, enemydirection);
 
          
@@ -161,7 +216,7 @@ function myTimer() {
          
             enemy.unflip("X");
         }
-            if(eventData.frame % 40 == 0 && difference(player.y, enemy.y) < 200 ){
+            if(eventData.frame % 50 == 0 && difference(player.y, enemy.y) < 200 ){
                 shoot(enemy,enemydirection, enemygunfire, "Player")
             }
 var distance = difference(player.x, enemy.x);
@@ -191,12 +246,24 @@ if(distance < 250){
                    });
 
         }
+        
+        
         function difference (a, b){ return Math.abs(a - b)};
         
 	     /* Floors */
 		 Crafty.e('Floor, 2D, Canvas, Color')
 		  .attr({x: 0, y: 440, w: 1500, h: 10})
+         
+         
+Crafty.e("2D, DOM, Color, solid, left")
+      .attr({x: -1, y: -200, w: 1, h: 646})
+      .color('black');
+Crafty.e("2D, DOM, Color, solid, right")
+      .attr({x: 1500, y: -200, w: 1, h: 646})
+      .color('black');
 		  
+        
+        
 		  function spawnTram(disx, disy){
               var tramfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion, Floor')
 		  .attr({x: disx+55, y: disy+57, w: 770, h: 10})
@@ -212,6 +279,9 @@ if(distance < 250){
                    Crafty.audio.add("shot", [
 "shot.wav"
 ]);
+        Crafty.audio.add('auw', [
+            "auw.wav"
+        ])
         
         function getgunfire(entity, firedirection){
             var gunfir = Crafty.e('2D, Canvas, Gunfire, SpriteAnimation, Motion')
@@ -233,12 +303,9 @@ if(distance < 250){
                  if(entity)
                  
                  var bullet = Crafty.e('2D, Canvas, Bullet, Motion, Collision')
-                                  .ignoreHits('Bullet')
+                                  
 
-                 .checkHits(victim+'Sprite')
-    .bind("HitOn", function(hitData) {
-        this.resetHitChecks(victim+'Sprite'); // fire the HitOn event in the next frame also, if the collision is still active.
-    })
+                
 
                                   bullet.addComponent(victim);
 
@@ -257,6 +324,7 @@ if(distance < 250){
 			speed.x = 800 *bulletdirection;   // set the speed in the x direction
                  
              }
+        
 		  
 	</script>
 	<!-- End of scripts -->
