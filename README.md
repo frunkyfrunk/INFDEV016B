@@ -75,14 +75,6 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>Database</li>
 </ul>
 
-<i>Level</i>
-<ul>
-<li>Opdracht</li>
-<li>Keuzes</li>
-<li>Volgende rank</li>
-<li>Vorige rank</li>
-</ul>
-
 <br />
 
 <b>Taakverdeling</b>
@@ -102,6 +94,5 @@ Ruben:  Hoger/lager
 <li>Skeleton voor HTML pagina en Javascript</li>
 <li>Login/Registreren</li>
 <li>Hoofdmenu</li>
-<li>Scorelijst</li>
 
 </ul>
