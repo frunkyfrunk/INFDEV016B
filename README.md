@@ -84,7 +84,7 @@ Johan:  Hitman, Login systeem
 <br />
 Mert:   Level
 <br />
-Ruben:  Hoger/lager
+Ruben:  Gokken
 <br />
 
 <br />
