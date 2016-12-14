@@ -30,13 +30,13 @@ Browser-based multiplayer game
 <br />
 Maffia game waarin de speler een nieuw lid is van de maffia. De speler kan de volgende activiteiten uitvoeren:
 <ul>
-<li>Misdaad plegen</li>
+<li>Overval plegen</li>
 <li>Gokken(hoger of lager)</li>
 <li>Hitman</li>
 <li>Geld stelen</li>
 </ul>
 
-Bij 'Misdaad plegen' kun je op basis van risico een misdaad kiezen. Een lager risico levert minder op dan een groter risico.
+Bij 'Overval' kun je...
 <br />
 Bij 'Gokken' speel je het spel 'Hoger Lager', je kiest of de getrokken kaart hoger of lager zal zijn dan een bepaald getal.
 <br />
@@ -58,7 +58,6 @@ De technieken die we van plan zijn om te gebruiken zijn:
 <li>jQuery 3.1.1</li>
 <li>Node.js 6.9.1</li>
 <li>npm 3.1.8</li>
-<li>Passport 0.3.2</li>
 <li>MongoDB 3.2.10</li>
 <li>Ubuntu 16.04 LTS</li>
 <li>Jenkins 2.33</li>
@@ -79,7 +78,7 @@ De technieken die we van plan zijn om te gebruiken zijn:
 
 <b>Taakverdeling</b>
 <br />
-Frank:  Level
+Frank:  Overval
 <br />
 Johan:  Hitman, Login systeem
 <br />
