@@ -2,31 +2,15 @@
   <head></head>
   <body>
 <script src="/socket.io/socket.io.js"></script>
-<script>
-var socket = io();
-</script>
-
-<div id="signUp">
-Username: <input type="text" id="username"><br>
-Password: <input type="password" id="password"><br>
-<button type="button" id="signIn">Sign In</button>
-<button type="button" id="register">Register</button>
-</div>
+<link rel="stylesheet" type="text/css" href="client/css/style.css">
 
 <div id="game"></div>
-    <script type="text/javascript" src="https://rawgithub.com/craftyjs/Crafty/release/dist/crafty-min.js"></script>
-    <script>
-      Crafty.init(500,350, document.getElementById('game'));
-  Crafty.e('Floor, 2D, Canvas, Color')
-  .attr({x: 0, y: 250, w: 250, h: 10})
-  .color('green');
-  Crafty.e('2D, Canvas, Color, Twoway, Gravity')
-  .attr({x: 0, y: 0, w: 50, h: 50})
-  .color('#F00')
-  .twoway(200)
-  .gravity('Floor');
-    </script>
+
+    <script type="text/javascript" src="client/js/crafty.js"></script>
+    <script type="text/javascript" src="client/js/game.js"></script>
+	
 	<script>
+	var socket = io();
 	var usernameText = document.getElementById("username");
 	var passwordText = document.getElementById("password");
 	var registerButton = document.getElementById("register");
@@ -44,6 +28,7 @@ Password: <input type="password" id="password"><br>
 	console.log(data.success);
 		if(data.success){
 		alert("sign in Successful");
+		Crafty.enterScene("menu");
 		} else {
 		alert("sign in Unsuccessful");
 		}
@@ -57,7 +42,6 @@ Password: <input type="password" id="password"><br>
 		alert("Register Unsuccessful");
 		}
 	});
-	
 	
 	</script>
 	</body>
