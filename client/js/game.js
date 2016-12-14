@@ -47,7 +47,59 @@ Crafty.init(500,500, document.getElementById('game'));
 	
  });
  
- Crafty.enterScene("login");
+ Crafty.defineScene("thegame", function() {
+	 
+	Crafty.sprite("client/img/gtasprite.png", {Player:[0,0]});
+	 
+	var player = Crafty.e("2D, Canvas, Fourway, Player")
+	.attr({x:250, y:250})
+	.crop(31,297,39,69)
+	.fourway(100);
+	
+	// .bind("KeyDown", function(e) {
+		// while(this.isDown != null){
+    // if(this.isDown(65) && this.isDown(87)) {
+		// this.fourway(50);
+		// this.color("blue");
+	// } else if (this.isDown(65) && this.isDown(83)) {
+		// this.fourway(50);
+		// this.color("blue");
+    // } else if (this.isDown(68) && this.isDown(83)) {
+		// this.fourway(50);
+		// this.color("blue");
+    // } else if (this.isDown(68) && this.isDown(87)) {
+		// this.fourway(50);
+		// this.color("blue");
+    // } else	{
+		// player.fourway(100);
+		// this.color("red");
+		// }}});
+		
+		// //var mouseX = event.clientX
+		// //var mouseY = event.clientY;
+		// console.log(mouseX)
+		
+		  // var testText = Crafty.e("2D, DOM, Text, Motion")
+		     // .attr({ x: 100, y: 100})
+			 // .text(function () { return "My position is " + this._x });
+			
+			  // setInterval(function testTextFunction() {
+				  // testText.text("mouse x = " + mouseX);
+			  // },1000);
+			 
+			 
+		
+	 
+	Crafty.background('#FFF000');	   
+		   
+	
+	  
+	  
+	 
+	 
+ }); 
+ 
+ Crafty.enterScene("thegame");
  
  Crafty.defineScene("menu", function() {
 	 
@@ -73,20 +125,19 @@ Crafty.init(500,500, document.getElementById('game'));
 	
 		
 		   
-		    var testText = Crafty.e("2D, DOM, Text, Motion")
-		    .attr({ x: 100, y: 100, vx: 10 })
-			.text(function () { return "My position is " + this._x });
+		    // var testText = Crafty.e("2D, DOM, Text, Motion")
+		    // .attr({ x: 100, y: 100, vx: 10 })
+			// .text(function () { return "My position is " + this._x });
 			
-			 setInterval(function testTextFunction() {
-				 testText.text(Math.floor(testText.x));
-			 },1000);
+			 // setInterval(function testTextFunction() {
+				 // testText.text(Math.floor(testText.x));
+			 // },1000);
 	  
-	 // console.log(Crafty.getVersion);
 	  
 	 
 	 
  Crafty.background('#FFF000');});
- 
+
  
  
  
