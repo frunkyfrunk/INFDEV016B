@@ -70,6 +70,7 @@
 					}, 1600);
 				});
 				
+			//Car object	
 			var car = Crafty.e("2D, DOM, Image")
 				.image("../Hitman/img/car.png")
 				.attr({x: 210, y: 325});
