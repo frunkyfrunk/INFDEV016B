@@ -7,16 +7,28 @@ var assert = require('assert');
 var url = 'mongodb://localhost:27017/DEV016B';
 var passwordHolder;
 var usernameHolder;
+var higherLower = require('./routes/higher-lower');
+var path = require('path');
+var bodyParser = require('body-parser');
 
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/views/index.html')
 });
 
-app.use('/public', express.static(__dirname + '/public'));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/higher-lower', higherLower);
+
 
 http.listen(3000, function () {
 	console.log("Server started");
 });
+
+
 
 io.on('connection', function (socket) {
 	console.log('a user connected');
@@ -90,10 +102,10 @@ function searchUserDetails(data) {
 			assert.equal(err, null);
 			if (typeof docs[0] !== 'undefined') {
 				usernameHolder = docs[0]["username"];
-				passwordHolder = docs[0]["password"];	
+				passwordHolder = docs[0]["password"];
 			}
 			callback(docs);
-			
+
 		});
 	};
 	return findDocuments;
