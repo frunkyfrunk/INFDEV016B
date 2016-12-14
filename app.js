@@ -9,13 +9,14 @@ var passwordHolder;
 var usernameHolder;
 
 app.get('/', function (req, res) {
-	res.sendFile(__dirname + '/client/index.html')
-})
-app.use('/client', express.static(__dirname + '/client'));
+	res.sendFile(__dirname + '/views/index.html')
+});
+
+app.use('/public', express.static(__dirname + '/public'));
 
 http.listen(3000, function () {
 	console.log("Server started");
-})
+});
 
 io.on('connection', function (socket) {
 	console.log('a user connected');
