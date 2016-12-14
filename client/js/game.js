@@ -73,11 +73,15 @@ Crafty.init(500,500, document.getElementById('game'));
 	
 		
 		   
-		    Crafty.e("2D, DOM, Text, Motion")
+		    var testText = Crafty.e("2D, DOM, Text, Motion")
 		    .attr({ x: 100, y: 100, vx: 10 })
-      	    .text(function () { return "My position is " + this._x })
-			.dynamicTextGeneration(true);
+			.text(function () { return "My position is " + this._x });
+			
+			 setInterval(function testTextFunction() {
+				 testText.text(Math.floor(testText.x));
+			 },1000);
 	  
+	 // console.log(Crafty.getVersion);
 	  
 	 
 	 
