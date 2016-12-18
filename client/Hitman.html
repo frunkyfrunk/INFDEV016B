@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MY APP</title>
+  <title>Maffia Game - Huurmoordenaar</title>
   <link rel="stylesheet" href="client/stylesheets/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="client/javascripts/crafty.js"></script>
   <script src="client/javascripts/crafty-min.js"></script>
+  
 </head>
 <body>
   <form action="/" method="POST" id="addMoney">
@@ -18,7 +20,7 @@
       <div class="row">
         <div class="col-sm-1"></div>
         <div class="col-sm-10">
-          <h2 id="GameTitle">Hitman</h2>
+          <h2 id="GameTitle">Huurmoordenaar</h2>
         </div>
         <div class="col-sm-1"></div>
       </div>
@@ -130,7 +132,7 @@
 					
 				
 				setTimeout(function() {
-					$("#addMoney").submit()				
+					$("#addMoney").submit();				
 					Lvl2();
 				}, 2000);
 				
@@ -220,7 +222,6 @@
 					Crafty.audio.play("shoot");					
 
 					setTimeout(function() {
-						$("#addMoney").submit()									
 						Crafty.scene("fail");
 					}, 1600);
 				});
@@ -249,7 +250,9 @@
 				.text("MISSION PASSED")
 				.textFont({size: '24px', family: 'Arial', weight: 'bold'})
 				.textColor('white');
-		
+				
+			
+			$("#addMoney").submit();								
 		});
 		
 		//Fail scene
