@@ -25,11 +25,13 @@
     </div>
 	
 	<!-- Begin of scripts -->
-	<script>
+	<script type="text/javascript">
         
 		Crafty.init(1000, 446, document.getElementById('game'));
 		Crafty.background('#FFFFFF url(bg.png) repeat');
 		/* Block */
+
+    
 		Crafty.sprite(472,99, "bullet.png", {
     Bullet: [0,0]
 });
@@ -53,42 +55,53 @@
         Crafty.sprite(128, 128,"tire.png", {
 		Tire: [0,0]
 		});
-        
-        var truck = spawnTruck(500, 300);
-        
-        function spawnTruck(disx,disy){
-               var truckfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion, Floor')
-		  .attr({x: disx+60, y: disy, w:120 , h: 0})
-              var truck = Crafty.e('2D, Canvas, Truck, Motion')
-		  .attr({x: disx, y: disy, w:246, h:121})
-              return truck;
-            
-        }
-        
-		var tram = spawnTram(-500, 129);
+        Crafty.sprite(157, 46,"collision.png", {
+		PlayerCollision: [0,0]
+		});
+        Crafty.sprite(888,244,"building.png", {
+    Building1: [0,0]
+    });
+
+       
+       
+		//var tram = spawnTram(300, 129);
 			
-		tram.bind("Move", function(oldPosition) {
-
-
-		  if(tram.x > 6000){
-              tram = spawnTram(-1000, 129);
-		  }
-		  });
+		
+            
         		 
         var direction = 1; //direction 1 = right, 0 is left
         var playerhealth = 5;
-		var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation,GroundAttacher, Collision, Keyboard')
-		  .attr({x: 10, y: 440, w:150, h: 150})
+        
+		var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard')
+		  .attr({x: 200, y: 290, w:150, h: 150})
 		  .twoway(200)
 		  .gravity('Floor')
-        .gravityConst(1500);
+        .gravityConst(1500)
+        .bind("CheckLanding", function(ground) {
+     if (player.y + player.h > ground.y + player.dy) { // forbid landing, if player's feet are not above ground
+        player.canLand = false;
+    }
+});
+ var truck = spawnObject(1200, 300, 246, 121, "Truck");
+        
+        
+var building1 = spawnObject(3000, 50,988,344, "Building1");
+building1.z = 1;
+function spawnObject(disx,disy,width, height, sprite){
+               var objectfloor = Crafty.e('Floor, 2D, Canvas, Color, Floor')
+		  .attr({x: disx+66, y: disy+10, w:width - player.w +24, h: 0});
+              var object = Crafty.e('2D, Canvas,' + sprite)
+		  .attr({x: disx, y: disy, w:width, h:height})
+              return object;
+        }
         var healthbar = gethealthbar(player);
 		   player.reel('PlayerRunning', 800, 1, 0, 6) // setup animation
            		  var gunfire = getgunfire(player, direction);
+           		  gunfire.z = 3;
                         player.collision([70,0,70,80,80,80,0,80]);
 
 player.bind('Moved', function(evt){
-    
+
         if (this.hit('solid')){
           this[evt.axis] = evt.oldValue;
         }
@@ -184,6 +197,17 @@ player.bind('Moved', function(evt){
         var interval = 5000;
         var enemiesalive = 0;
         var myVar = setInterval(myTimer, interval);
+        Crafty.bind("EnterFrame", function (eventData) {
+          if(eventData.frame% 300 == 0 && enemiesalive < 6 ){
+
+//(300+player.x,400);
+          }
+          if(eventData.frame% 400 == 0 && enemiesalive < 6){
+                    //SpawnEnemy(300+player.x, 100);
+
+          }
+          
+        })
 function myTimer() {
     if(enemiesalive < 5){
         
@@ -193,7 +217,6 @@ function myTimer() {
         //SpawnEnemy(x, y);
     }
 }
-                SpawnEnemy(700, 400);
 
         function gethealthbar(entity){
             var bar = Crafty.e("2D, DOM, Color, right")
@@ -271,9 +294,9 @@ if(distance > 600 || distance < 250){
             } 
             else 
             if(enemy.x > player.x && distance > 250){
-                enemy.velocity().x = -70;
+                enemy.velocity().x = -160;
             } else if(enemy.x < player.x && distance > 250){
-                                enemy.velocity().x = 70;
+                                enemy.velocity().x = 160;
 
             }
                  
@@ -293,6 +316,7 @@ if(distance > 600 || distance < 250){
         }
         
         
+
         function difference (a, b){ return Math.abs(a - b)};
         
 	     /* Floors */
@@ -313,12 +337,41 @@ Crafty.e("2D, DOM, Color, solid, left")
               var tramfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion, Floor')
 		  .attr({x: disx+55, y: disy+57, w: 770, h: 0})
               tramfloor.velocity().x = 80;
+              tramfloor.bind('Move', function(oldPosition){
+            var speed = tramfloor.velocity(); //returns the speed object
+            if(tramfloor.x > 700){
+              speed.x = -80;
+            } else if( tramfloor.x < 0){
+              speed.x = 80;
+
+            }
+
+            
+          });
               var tram = Crafty.e('2D, Canvas, tram, Motion')
 		  .attr({x: disx, y: disy})
 		var speed = tram.velocity(); //returns the speed object
 			speed.x = 80;   // set the speed in the x direction
               return tram;
+              
+              tram.bind('Move', function(oldPosition){
+            var speed = tram.velocity(); //returns the speed object
+            if(tram.x > 700){
+              speed.x = -80
+
+
+            } else if( tram.x < 0){
+              speed.x = 80;
+
+            }
+
+
+
+            
+          });
           }
+          
+          
          
                    
                    Crafty.audio.add("shot", [
@@ -353,7 +406,8 @@ Crafty.e("2D, DOM, Color, solid, left")
                 
 
                                   bullet.addComponent(victim);
-
+                                  bullet.z =3;
+                                  
                  
                  if(bulletdirection == 1){
 		  disx = disx-300;
