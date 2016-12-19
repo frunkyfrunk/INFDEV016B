@@ -5,7 +5,7 @@ var assert = require('assert');
 var it = require('mocha').it;
 var describe = require('mocha').describe;
 var rewire = require('rewire'),
-    index = rewire('../routes/index');
+    index = rewire('../routes/higher-lower');
 
 
 
