@@ -20,6 +20,12 @@ https://github.com/frunkyfrunk/INFDEV016B
 
 <br />
 
+<b>Release document</b>
+<br />
+https://github.com/frunkyfrunk/INFDEV016B/blob/old-master/Release-document.docx
+
+<br />
+
 <b>Gekozen project</b>
 <br />
 Browser-based multiplayer game
