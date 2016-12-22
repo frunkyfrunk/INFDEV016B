@@ -26,13 +26,7 @@
 	
 	<!-- Begin of scripts -->
 	<script type="text/javascript">
-        
-		Crafty.init(1000, 446, document.getElementById('game'));
-		Crafty.background('#FFFFFF url(bg.png) repeat');
-		/* Block */
-
-    
-		Crafty.sprite(472,99, "bullet.png", {
+Crafty.sprite(472,99, "bullet.png", {
     Bullet: [0,0]
 });
         
@@ -55,12 +49,19 @@
         Crafty.sprite(128, 128,"tire.png", {
 		Tire: [0,0]
 		});
-        Crafty.sprite(157, 46,"collision.png", {
-		PlayerCollision: [0,0]
-		});
         Crafty.sprite(888,244,"building.png", {
     Building1: [0,0]
     });
+var player;
+
+		
+        Crafty.defineScene("Scene1", function() {
+		Crafty.init(1000, 446, document.getElementById('game'));
+		Crafty.background('#FFFFFF url(bg.png) repeat');
+		/* Block */
+
+    player = getPlayer();
+
 
        
        
@@ -69,21 +70,14 @@
 		
             
         		 
-        var direction = 1; //direction 1 = right, 0 is left
-        var playerhealth = 5;
         
-		var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard')
-		  .attr({x: 200, y: 290, w:150, h: 150})
-		  .twoway(200)
-		  .gravity('Floor')
-        .gravityConst(1500)
-        .bind("CheckLanding", function(ground) {
-     if (player.y + player.h > ground.y + player.dy) { // forbid landing, if player's feet are not above ground
-        player.canLand = false;
-    }
-});
+        
+		
  var truck = spawnObject(1200, 300, 246, 121, "Truck");
-        
+        var door = Crafty.e('2D, DOM, Color, Door').attr({x: 3326, y: 256, w: 80, h: 100}).color('#000000');
+        door.z = 0;
+                
+
         
 var building1 = spawnObject(3000, 50,988,344, "Building1");
 building1.z = 1;
@@ -95,47 +89,7 @@ function spawnObject(disx,disy,width, height, sprite){
               return object;
         }
         var healthbar = gethealthbar(player);
-		   player.reel('PlayerRunning', 800, 1, 0, 6) // setup animation
-           		  var gunfire = getgunfire(player, direction);
-           		  gunfire.z = 3;
-                        player.collision([70,0,70,80,80,80,0,80]);
-
-player.bind('Moved', function(evt){
-
-        if (this.hit('solid')){
-          this[evt.axis] = evt.oldValue;
-        }
-      });
-
-		  player.bind('KeyDown', function(e) {
-    if(e.key == Crafty.keys.SPACE) {
-        shoot(player, direction, gunfire, "Enemy")
-    } 
-    if(e.key == Crafty.keys.LEFT_ARROW || e.key == Crafty.keys.A){
-        player.flip("X");
-        direction =-1;
-    }
-              if(e.key == Crafty.keys.RIGHT_ARROW || e.key == Crafty.keys.D){
-        player.unflip("X");
-                  direction = 1;
-    }
-              
-          });
-        player.jumper(1000, ['UP_ARROW', 'W']);
-
-    player.onHit('Player', function(entity){
-                         Crafty.audio.play("auw")
-
-                    playerhealth--;
-        healthbar.attr({w: playerhealth*20});
-        var color = redYellowGreen(0, 100,playerhealth*20);
-        healthbar.color(color);
-        if(playerhealth < 1 ){
-        this.destroy();
-            }
-    
-                    entity[0].obj.destroy();
-    });
+		   
     function redYellowGreen(min, max, value)
 {
 	var green_max = 220;
@@ -156,67 +110,10 @@ player.bind('Moved', function(evt){
 	}
 	return 'rgb('+red+','+green+','+blue+')';
 }
-		  player.bind("Move", function(oldPosition) {
-               var screenWidth = Crafty.viewport._width-300;
-   
-            Crafty.viewport.x = (this.x - (screenWidth / 2)) * -1;
-            document.getElementById("game").style.backgroundPosition = Crafty.viewport.x + "px";
-          
-              
-                 var posx = player.x;
-                 if(direction == -1){
-                  posx = posx -320;
-                                       gunfire.flip("X")
 
-              } else {
-                                    gunfire.unflip("X")
+		
+		 
 
-              }
-                 gunfire.attr({x: posx, y: player.y-27})
-                                                       
-          var keydown = false;
-              if(this.isDown('LEFT_ARROW') || this.isDown('RIGHT_ARROW')|| this.isDown('A')|| this.isDown('D')){
-                  keydown =true;
-              }
-              
-              
-		  if(!player.isPlaying() && oldPosition._x != player.x && oldPosition._x < 5998 && oldPosition._x > 2 && keydown == true){
-              
-		  		  player.animate('PlayerRunning',1) // setup animation
-                  
-		  } 
-              
-          
-});
-        player.bind('EnterFrame', function(){
-            if(!player.isPlaying()){
-              player.sprite(0, 0);
-          }
-        });
-        
-        var interval = 5000;
-        var enemiesalive = 0;
-        var myVar = setInterval(myTimer, interval);
-        Crafty.bind("EnterFrame", function (eventData) {
-          if(eventData.frame% 300 == 0 && enemiesalive < 6 ){
-
-//(300+player.x,400);
-          }
-          if(eventData.frame% 400 == 0 && enemiesalive < 6){
-                    //SpawnEnemy(300+player.x, 100);
-
-          }
-          
-        })
-function myTimer() {
-    if(enemiesalive < 5){
-        
-               var x = Math.floor((Math.random() * 90) + 800);
-                       var y = Math.floor((Math.random() * 180) + 100);
-
-        //SpawnEnemy(x, y);
-    }
-}
 
         function gethealthbar(entity){
             var bar = Crafty.e("2D, DOM, Color, right")
@@ -320,7 +217,7 @@ if(distance > 600 || distance < 250){
         function difference (a, b){ return Math.abs(a - b)};
         
 	     /* Floors */
-		 Crafty.e('Floor, 2D, Canvas, Color')
+		 Crafty.e('Floor, 2D, Canvas, Color, Persist')
 		  .attr({x: 0, y: 440, w: 6000, h: 10})
          
          
@@ -381,14 +278,152 @@ Crafty.e("2D, DOM, Color, solid, left")
             "auw.wav"
         ])
         
-        function getgunfire(entity, firedirection){
+        
+			 
+        });
+                Crafty.defineScene("Scene2", function() {
+							Crafty.background('#FFFFFF url(indoorbg.png) repeat');
+							Crafty.e("2D, DOM, Color, solid, left")
+
+      .attr({x: -1, y: -200, w: 1, h: 646})
+      .color();
+        Crafty.e("2D, DOM, Color, solid, right")
+      .attr({x: 1000, y: -200, w: 1, h: 646})
+      .color();
+      							player.x = 0;
+});
+		  		Crafty.enterScene("Scene1");
+		  		
+		  		
+		  		
+		  		
+		  		
+		  		
+		  		function getPlayer() {
+		  			var direction = 1; //direction 1 = right, 0 is left
+        var playerhealth = 5;
+		  			var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard, Persist')
+		  .attr({x: 200, y: 290, w:150, h: 150})
+		  .twoway(200)
+		  .gravity('Floor')
+        .gravityConst(1500)
+        .bind("CheckLanding", function(ground) {
+     if (player.y + player.h > ground.y + player.dy) { // forbid landing, if player's feet are not above ground
+        player.canLand = false;
+    }
+});
+player.origin("Center");
+player.z = 200;
+player.reel('PlayerRunning', 800, 1, 0, 6) // setup animation
+           		  var gunfire = getgunfire(player, 1);
+           		  gunfire.z = 3;
+                        player.collision([70,0,70,80,80,80,0,80]);
+
+player.bind('Moved', function(evt){
+
+        if (this.hit('solid')){
+          this[evt.axis] = evt.oldValue;
+        }
+      });
+
+		  player.bind('KeyDown', function(e) {
+    if(e.key == Crafty.keys.SPACE) {
+        shoot(player, direction, gunfire, "Enemy")
+    } 
+    if(e.key == Crafty.keys.LEFT_ARROW || e.key == Crafty.keys.A){
+        player.flip("X");
+        direction = -1;
+
+    }
+              if(e.key == Crafty.keys.RIGHT_ARROW || e.key == Crafty.keys.D){
+        player.unflip("X");
+        direction = 1;
+
+    }
+              
+          });
+        player.jumper(1000, ['UP_ARROW', 'W']);
+
+    player.onHit('Player', function(entity){
+                         Crafty.audio.play("auw")
+
+                    playerhealth--;
+        healthbar.attr({w: playerhealth*20});
+        var color = redYellowGreen(0, 100,playerhealth*20);
+        healthbar.color(color);
+        if(playerhealth < 1 ){
+        this.destroy();
+            }
+    
+                    entity[0].obj.destroy();
+    });
+    player.onHit('Door', function(entity){
+				Crafty.enterScene("Scene2");
+    });
+     player.bind("Move", function(oldPosition) {
+			  var posx = player.x;
+                 if(direction == -1){
+                  posx = posx -320;
+                                       gunfire.flip("X")
+
+              } else {
+                                    gunfire.unflip("X")
+
+              }
+                 gunfire.attr({x: posx, y: player.y-27})
+               var screenWidth = Crafty.viewport._width-300;
+   
+            Crafty.viewport.x = (this.x - (screenWidth / 2)) * -1;
+            document.getElementById("game").style.backgroundPosition = Crafty.viewport.x + "px";
+          
+              
+                 
+                                                       
+          var keydown = false;
+              if(this.isDown('LEFT_ARROW') || this.isDown('RIGHT_ARROW')|| this.isDown('A')|| this.isDown('D')){
+                  keydown =true;
+              }
+              
+              
+		  if(!player.isPlaying() && oldPosition._x != player.x && oldPosition._x < 5998 && oldPosition._x > 2 && keydown == true){
+              
+		  		  player.animate('PlayerRunning',1) // setup animation
+                  
+		  } 
+              
+          
+});
+        player.bind('EnterFrame', function(){
+            if(!player.isPlaying()){
+              player.sprite(0, 0);
+          }
+        });
+        
+        var interval = 5000;
+        var enemiesalive = 0;
+
+        Crafty.bind("EnterFrame", function (eventData) {
+          if(eventData.frame% 300 == 0 && enemiesalive < 6 ){
+
+//(300+player.x,400);
+          }
+          if(eventData.frame% 400 == 0 && enemiesalive < 6){
+                    //SpawnEnemy(300+player.x, 100);
+
+          }
+          
+        })
+return player;
+		  		}
+		  		
+		  		function getgunfire(entity, firedirection){
             var gunfir = Crafty.e('2D, Canvas, Gunfire, SpriteAnimation, Motion')
                           		   gunfir.reel('Shot', 300, 0, 0, 2) // setup animation
            
             return gunfir;
                                    
         }
-			 function shoot(entity,bulletdirection, gunfire, victim){
+        function shoot(entity,bulletdirection, gunfire, victim){
                  var disx = entity.x;
                  var disy = entity.y;
                  
@@ -423,8 +458,7 @@ Crafty.e("2D, DOM, Color, solid, left")
 			speed.x = 600 *bulletdirection;   // set the speed in the x direction
                  
              }
-        
-		  
+
 	</script>
 	<!-- End of scripts -->
 	
