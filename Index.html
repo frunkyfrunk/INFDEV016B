@@ -26,6 +26,7 @@
 	
 	<!-- Begin of scripts -->
 	<script type="text/javascript">
+	                var enemiesalive = 0;
 Crafty.sprite(472,99, "bullet.png", {
     Bullet: [0,0]
 });
@@ -65,13 +66,15 @@ var player;
 
        
        
-		//var tram = spawnTram(300, 129);
+		var tram = spawnTram(1000, 129);
 			
 		
             
         		 
-        
-        
+        SpawnEnemy(850, 300, true);
+        SpawnEnemy(1500, 300, true);
+        SpawnEnemy(1000, 100, false);
+        SpawnEnemy(1200, 200, false);
 		
  var truck = spawnObject(1200, 300, 246, 121, "Truck");
         var door = Crafty.e('2D, DOM, Color, Door').attr({x: 3326, y: 256, w: 80, h: 100}).color('#000000');
@@ -88,46 +91,12 @@ function spawnObject(disx,disy,width, height, sprite){
 		  .attr({x: disx, y: disy, w:width, h:height})
               return object;
         }
-        var healthbar = gethealthbar(player);
+
 		   
-    function redYellowGreen(min, max, value)
-{
-	var green_max = 220;
-	var red_max = 220;
-	var red = 0;
-	var green = 0;
-	var blue = 0;
+  
 
-	if (value < max/2)
-	{
-		red = red_max;
-		green = Math.round((value/(max/2))*green_max);
-	}
-	else
-	{
-		green = green_max;
-		red = Math.round((1-((value-(max/2))/(max/2)))*red_max);
-	}
-	return 'rgb('+red+','+green+','+blue+')';
-}
+        function SpawnEnemy(x, y, followplayer){
 
-		
-		 
-
-
-        function gethealthbar(entity){
-            var bar = Crafty.e("2D, DOM, Color, right")
-      .attr({x: entity.x, y: entity.y, w: 100, h: 10})
-      .color('green');
-            entity.bind('Move', function(evt){
-                
-                bar.attr({x: entity.x+30, y: entity.y-20})
-                
-            });
-            return bar;
-        }
-        
-        function SpawnEnemy(x, y){
             var enemydirection = -1;
             var health = 3;
             enemiesalive++;
@@ -141,7 +110,7 @@ function spawnObject(disx,disy,width, height, sprite){
         .reel('EnemyRunning', 1000, 0, 0, 5);
             enemy.checkHits('Enemy');
     enemy.onHit('Enemy', function(entity){
-                                 Crafty.audio.play("auw")
+
 
                     health--;
         
@@ -190,9 +159,9 @@ if(distance > 600 || distance < 250){
                 enemy.velocity().x = 0;
             } 
             else 
-            if(enemy.x > player.x && distance > 250){
+            if(enemy.x > player.x && distance > 250 && followplayer){
                 enemy.velocity().x = -160;
-            } else if(enemy.x < player.x && distance > 250){
+            } else if(enemy.x < player.x && distance > 250 && followplayer){
                                 enemy.velocity().x = 160;
 
             }
@@ -234,38 +203,13 @@ Crafty.e("2D, DOM, Color, solid, left")
               var tramfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion, Floor')
 		  .attr({x: disx+55, y: disy+57, w: 770, h: 0})
               tramfloor.velocity().x = 80;
-              tramfloor.bind('Move', function(oldPosition){
-            var speed = tramfloor.velocity(); //returns the speed object
-            if(tramfloor.x > 700){
-              speed.x = -80;
-            } else if( tramfloor.x < 0){
-              speed.x = 80;
-
-            }
-
-            
-          });
+              
               var tram = Crafty.e('2D, Canvas, tram, Motion')
 		  .attr({x: disx, y: disy})
 		var speed = tram.velocity(); //returns the speed object
 			speed.x = 80;   // set the speed in the x direction
               return tram;
               
-              tram.bind('Move', function(oldPosition){
-            var speed = tram.velocity(); //returns the speed object
-            if(tram.x > 700){
-              speed.x = -80
-
-
-            } else if( tram.x < 0){
-              speed.x = 80;
-
-            }
-
-
-
-            
-          });
           }
           
           
@@ -300,6 +244,7 @@ Crafty.e("2D, DOM, Color, solid, left")
 		  		
 		  		
 		  		function getPlayer() {
+
 		  			var direction = 1; //direction 1 = right, 0 is left
         var playerhealth = 5;
 		  			var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard, Persist')
@@ -312,6 +257,7 @@ Crafty.e("2D, DOM, Color, solid, left")
         player.canLand = false;
     }
 });
+		  		        var healthbar = gethealthbar(player);
 player.origin("Center");
 player.z = 200;
 player.reel('PlayerRunning', 800, 1, 0, 6) // setup animation
@@ -345,7 +291,7 @@ player.bind('Moved', function(evt){
         player.jumper(1000, ['UP_ARROW', 'W']);
 
     player.onHit('Player', function(entity){
-                         Crafty.audio.play("auw")
+
 
                     playerhealth--;
         healthbar.attr({w: playerhealth*20});
@@ -399,20 +345,8 @@ player.bind('Moved', function(evt){
           }
         });
         
-        var interval = 5000;
-        var enemiesalive = 0;
 
-        Crafty.bind("EnterFrame", function (eventData) {
-          if(eventData.frame% 300 == 0 && enemiesalive < 6 ){
-
-//(300+player.x,400);
-          }
-          if(eventData.frame% 400 == 0 && enemiesalive < 6){
-                    //SpawnEnemy(300+player.x, 100);
-
-          }
-          
-        })
+        
 return player;
 		  		}
 		  		
@@ -458,6 +392,42 @@ return player;
 			speed.x = 600 *bulletdirection;   // set the speed in the x direction
                  
              }
+               function redYellowGreen(min, max, value)
+{
+	var green_max = 220;
+	var red_max = 220;
+	var red = 0;
+	var green = 0;
+	var blue = 0;
+
+	if (value < max/2)
+	{
+		red = red_max;
+		green = Math.round((value/(max/2))*green_max);
+	}
+	else
+	{
+		green = green_max;
+		red = Math.round((1-((value-(max/2))/(max/2)))*red_max);
+	}
+	return 'rgb('+red+','+green+','+blue+')';
+}
+
+		
+		 
+
+
+        function gethealthbar(entity){
+            var bar = Crafty.e("2D, DOM, Color, right")
+      .attr({x: entity.x, y: entity.y, w: 100, h: 10})
+      .color('green');
+            entity.bind('Move', function(evt){
+                
+                bar.attr({x: entity.x+30, y: entity.y-20})
+                
+            });
+            return bar;
+        }
 
 	</script>
 	<!-- End of scripts -->
