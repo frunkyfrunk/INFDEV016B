@@ -292,7 +292,7 @@ player.bind('Moved', function(evt){
         player.jumper(1000, ['UP_ARROW', 'W']);
 
     player.onHit('Player', function(entity){
-if( difference(entity[0].obj.x, this.x) <100 ){
+if( difference(entity[0].obj.x, this.x) <200 ){
                     playerhealth--;
         healthbar.attr({w: playerhealth*20});
         var color = redYellowGreen(0, 100,playerhealth*20);
