@@ -53,8 +53,7 @@ app.post('/reward/:username', (req, res) => {
 
 	rewardPlayer(username);
 
-	res.status(200);
-    	res.send('User has been rewarded!').end();
+	res.status(200).end();
 
 })
 

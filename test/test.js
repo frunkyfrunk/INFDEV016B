@@ -1,5 +1,4 @@
 var request = require('supertest');
-var superagent = require('superagent');
 var chai = require('chai');
 var mongoose = require('mongoose');
 var expect = chai.expect;
@@ -10,6 +9,7 @@ var User = require('../models/user');
 var server = require('../app');
 var api = request('http://localhost:3000');
 
+var nodeserver = request.agent("http://localhost:3000");
 
 describe('Database Tests', function() {
 
@@ -42,7 +42,7 @@ describe('Database Tests', function() {
 
 		it('Adds a new user to database', function(done) {
 			//Add test data
-			regUser = User({
+			var regUser = User({
 				username: 'Bobby',
 				password: 'bob',
 				money: 99
@@ -68,8 +68,9 @@ describe('Database Tests', function() {
 				notPassWord: 'Not bob',
 				notMoney: 0
 			});
-			wrongSave.save(err => {
-				if(err) { return done();}
+
+			wrongSave.save(done, err => {
+				if(!err) { return done();}
 				throw new Error('Should generate error!');
 			});
 		});
@@ -116,16 +117,18 @@ describe('Database Tests', function() {
 
 		
 		it('POST /hitman/:username', function(done) {
-			api.post('/reward/' + testUser.username)
-				.end(function(err, res){	
-					expect(res.status).to.equal(200);
-                    			expect(res.text).to.contain('User has been rewarded!');
-
-					done();
-				});
-			});
+			nodeserver
+			    .post("/reward/" + testUser.username)
+			    .expect(200)
+			    .end(function(err,res){
+				//Expect HTTP Status to equal 200
+				res.status.should.equal(200);
+				done();
+			    });
 
 		});
+
+	});
 
 
 	//After all tests are finished close connection
