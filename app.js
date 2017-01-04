@@ -54,7 +54,6 @@ app.post('/reward/:username', (req, res) => {
 	rewardPlayer(username);
 
 	res.status(200).end();
-
 })
 
 /*------------------------------------------------------------*/
