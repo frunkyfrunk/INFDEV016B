@@ -1,5 +1,5 @@
 /**
-* Shooter game
+* Robbery game
 * Crafty JS
 * Author: Frank A. Verhagen
 */
@@ -34,7 +34,7 @@ var player;
 
 		
         Crafty.defineScene("Scene1", function() {
-		Crafty.init(1000, 446, document.getElementById('game'));
+		Crafty.init(1000, 600, document.getElementById('game'));
 		Crafty.background('#FFFFFF url(bg.png) repeat');
 		/* Block */
 
@@ -53,13 +53,13 @@ var player;
         SpawnEnemy(1000, 100, false);
         SpawnEnemy(1200, 200, false);
 		
- var truck = spawnObject(1200, 300, 246, 121, "Truck");
-        var door = Crafty.e('2D, DOM, Color, Door').attr({x: 3326, y: 256, w: 80, h: 100}).color('#000000');
+ var truck = spawnObject(1200, 383, 246, 121, "Truck");
+        var door = Crafty.e('2D, DOM, Color, Door').attr({x: 3326, y: 256+83, w: 80, h: 100}).color('#000000');
         door.z = 0;
                 
 
         
-var building1 = spawnObject(3000, 50,988,344, "Building1");
+var building1 = spawnObject(3000, 133,988,344, "Building1");
 building1.z = 1;
 function spawnObject(disx,disy,width, height, sprite){
                var objectfloor = Crafty.e('Floor, 2D, Canvas, Color, Floor')
@@ -164,7 +164,7 @@ if(distance > 600 || distance < 250){
         
 	     /* Floors */
 		 Crafty.e('Floor, 2D, Canvas, Color, Persist')
-		  .attr({x: 0, y: 440, w: 6000, h: 10})
+		  .attr({x: 0, y: 500, w: 6000, h: 10})
          
          
 Crafty.e("2D, DOM, Color, solid, left")
@@ -178,11 +178,11 @@ Crafty.e("2D, DOM, Color, solid, left")
         
 		  function spawnTram(disx, disy){
               var tramfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion, Floor')
-		  .attr({x: disx+55, y: disy+57, w: 770, h: 0})
+		  .attr({x: disx+55, y: disy+57+83, w: 770, h: 0})
               tramfloor.velocity().x = 80;
               
               var tram = Crafty.e('2D, Canvas, tram, Motion')
-		  .attr({x: disx, y: disy})
+		  .attr({x: disx, y: disy+83})
 		var speed = tram.velocity(); //returns the speed object
 			speed.x = 80;   // set the speed in the x direction
               return tram;
@@ -225,7 +225,7 @@ Crafty.e("2D, DOM, Color, solid, left")
 		  			var direction = 1; //direction 1 = right, 0 is left
         var playerhealth = 5;
 		  			var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard, Persist, WiredHitBox')
-		  .attr({x: 200, y: 290, w:150, h: 150})
+		  .attr({x: 200, y: 350, w:150, h: 150})
 		  .twoway(200)
 		  .gravity('Floor')
         .gravityConst(1500)
@@ -256,11 +256,15 @@ player.bind('Moved', function(evt){
     } 
     if(e.key == Crafty.keys.LEFT_ARROW || e.key == Crafty.keys.A){
         player.flip("X");
+                                player.collision([83,0,95,134,50,134,58,0] );
+
         direction = -1;
 
     }
               if(e.key == Crafty.keys.RIGHT_ARROW || e.key == Crafty.keys.D){
         player.unflip("X");
+                                          player.collision([95,0,95,134,50,134,50,80,70,0] );
+
         direction = 1;
 
     }
