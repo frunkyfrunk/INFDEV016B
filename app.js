@@ -59,17 +59,17 @@ app.post('/reward/:username', (req, res) => {
 /*------------------------------------------------------------*/
 //Fuctions Mongoose
 function rewardPlayer(name){
-	console.log('Player: ' + name);
+	console.log('\t Player: ' + name);
 	var query = User.findOne({ username: name }, function (err, doc){
 		var oldMoney = doc.money;
 		var newMoney = oldMoney + 25;
 
-		console.log('Old money: ' + oldMoney);
-		console.log('New money: ' + newMoney);
+		console.log('\t Old money: ' + oldMoney);
+		console.log('\t New money: ' + newMoney);
 
 		doc.money = newMoney;
 		doc.save();
-		console.log('Player is rewarded $' + (newMoney - oldMoney));
+		console.log('\t Player is rewarded $' + (newMoney - oldMoney));
 	});
 }
 
