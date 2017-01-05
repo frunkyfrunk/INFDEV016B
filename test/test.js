@@ -62,20 +62,6 @@ describe('Database Tests', function() {
 		});
 	
 
-		it('Save a user with wrong properties to database', function(done) {
-			var wrongSave = User({
-				notUserName: 'Not Bob',
-				notPassWord: 'Not bob',
-				notMoney: 0
-			});
-
-			wrongSave.save(done, err => {
-				if(!err) { return done();}
-				throw new Error('Should generate error!');
-			});
-		});
-
-
 		it('Updates a user by username', function(done) {
 			//Use timeout of 6 seconds
 			this.timeout(6000);
