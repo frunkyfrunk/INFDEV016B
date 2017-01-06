@@ -27,16 +27,18 @@ button {
     -moz-transition: all 0.35s ease-in-out;
     -webkit-transition: all 0.35s ease-in-out;
     -o-transition: all 0.35s ease-in-out;
-	margin-left:25%;
-	margin-top:10%;
+	margin-left:25.5%;
+	margin-top:3%;
+	width:100px;
+	height:30px;
 }
 
 #username{
-	margin-left:27.5%;
-	margin-top:50%;
+	margin-left:37.5%;
+	margin-top:30%;
 }
 
 #password{
 	margin-top:2%;
-	margin-left:27.5%;
+	margin-left:37.5%;
 }

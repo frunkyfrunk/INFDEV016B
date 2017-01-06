@@ -17,16 +17,25 @@ http.listen(3000, function () {
 	console.log("Server started");
 })
 
+var SOCKET_LIST = {};
+var PLAYER_LIST = [];
+
 io.on('connection', function (socket) {
-	console.log('a user connected');
-	// socket.id = Math.random();
-	// SOCKET_LIST[socket.id] = socket;
+	 socket.id = Math.random();
+	 socket.x = 0;
+	 socket.y = 0;
+	 SOCKET_LIST[socket.id] = socket;
+	 PLAYER_LIST.push(socket.id);
+	 
+	 console.log('active players ' + PLAYER_LIST.length);
+	 console.log('socket ' + socket.id + ' has connected to the server ');
 
 	socket.on('signInData', function (data) {
 		if (isPasswordValid(data)) {
 			socket.emit('signInResponse', {
 				success: true
 			});
+			socket.broadcast.emit('onlinePlayersUpdate', {onlinePlayers:  PLAYER_LIST.length});
 		} else {
 			socket.emit('signInResponse', {
 				success: false
@@ -46,10 +55,32 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('disconnect', function () {
-		console.log('user disconnected');
+		console.log('socket ' + socket.id  + ' disconnected');
+		PLAYER_LIST.splice(socket.id,1);
+		socket.broadcast.emit('onlinePlayersUpdate', {onlinePlayers:  PLAYER_LIST.length});
 	});
 
 });
+
+setInterval(function() {
+	var pack = [];
+	
+	for(var i in SOCKET_LIST){
+		var socket = SOCKET_LIST[i];
+		socket.x++;
+		socket.y++;
+		pack.push({
+			x:socket.x,
+			y:socket.y
+		});
+	}
+	
+	for(var i in SOCKET_LIST){
+		var socket = SOCKET_LIST[i];
+		socket.emit('newPositions', pack);
+	}	
+}, 1000/25);
+
 
 // Use connect method to connect to the server
 function useDatabase(mongoQuery) {
@@ -65,6 +96,7 @@ function useDatabase(mongoQuery) {
 		}
 	})
 };
+
 
 function insertUserDetails(data) {
 	var insertDocument = function (db, callback) {
