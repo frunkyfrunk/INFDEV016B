@@ -419,4 +419,20 @@ return player;
             return bar;
         }
         function difference (a, b){ return Math.abs(a - b)};
+		
+		function getReward(){
+		$.ajax({ 
+			url: '/reward',
+			type: 'POST',
+			cache: false, 
+			data: { player: $("#uname").val()}, 
+		        success: function(data) {
+		          console.log(data);
+		          console.log('process sucess');
+		       },
+		        error: function() {
+		          console.log('process error');
+		        }
+		})
+	}
 
