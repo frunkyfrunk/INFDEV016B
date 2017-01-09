@@ -4,14 +4,13 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var url = 'mongodb://localhost:27017/DEV016B';
+var databaseUrl = 'mongodb://localhost:27017/DEV016B';
 var passwordHolder;
 var usernameHolder;
 var higherLower = require('./routes/higher-lower');
 var path = require('path');
 var bodyParser = require('body-parser');
 
-//jenkins commmit test, delete this line
 
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/views/index.html')
@@ -21,16 +20,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 app.use('/higher-lower', higherLower);
-
 
 http.listen(3000, function () {
 	console.log("Server started");
 });
-
-
 
 io.on('connection', function (socket) {
 	console.log('a user connected');
@@ -68,7 +64,7 @@ io.on('connection', function (socket) {
 
 // Use connect method to connect to the server
 function useDatabase(mongoQuery) {
-	MongoClient.connect(url, function (err, db) {
+	MongoClient.connect(databaseUrl, function (err, db) {
 		if (err) {
 			console.log('Unable to connect to the mongoDB server. Error:', err);
 		} else {
