@@ -31,12 +31,11 @@ Crafty.sprite(472,99, "bullet.png", {
     Building1: [0,0]
     });
 var player;
-
+var healthbar;
 		
         Crafty.defineScene("Scene1", function() {
 		Crafty.init(1000, 600, document.getElementById('game'));
 		Crafty.background('#FFFFFF url(bg.png) repeat');
-		/* Block */
 
     player = getPlayer();
 
@@ -48,10 +47,9 @@ var player;
 		
             
         		 
-        SpawnEnemy(850, 300, true);
-        SpawnEnemy(1500, 300, true);
-        SpawnEnemy(1000, 100, false);
-        SpawnEnemy(1200, 200, false);
+        SpawnEnemy(850, 300, false);
+        SpawnEnemy(1200, 100, false);
+        SpawnEnemy(1200, 280, false);
 		
  var truck = spawnObject(1200, 383, 246, 121, "Truck");
         var door = Crafty.e('2D, DOM, Color, Door').attr({x: 3326, y: 256+83, w: 80, h: 100}).color('#000000');
@@ -69,99 +67,6 @@ function spawnObject(disx,disy,width, height, sprite){
               return object;
         }
 
-		   
-  
-
-        function SpawnEnemy(x, y, followplayer){
-
-            var enemydirection = -1;
-            var health = 3;
-            enemiesalive++;
-            var enemy = Crafty.e('2D, DOM, EnemySprite, Twoway, Gravity,SpriteAnimation, Collision, solid')
-
-		  .attr({x: x, y: y, w:150, h: 150})
-                        .collision([70,0,70,130,80,130,80,0])
-
-		  .gravity('Floor')
-        .gravityConst(1000)
-        .reel('EnemyRunning', 1000, 0, 0, 5);
-            enemy.checkHits('Enemy');
-    enemy.onHit('Enemy', function(entity){
-
-
-                    health--;
-        
-        enemyhealthbar.attr({w: health*20});
-        var color = redYellowGreen(0, 100,health*20);
-        enemyhealthbar.color(color);
-            if(health < 1 ){
-        this.destroy();
-            }
-    
-                    entity[0].obj.destroy();
-    });
-                         var enemyhealthbar = gethealthbar(enemy);
-
-                        		  var enemygunfire = getgunfire(enemy, enemydirection);
-
-         
-        enemy.bind("EnterFrame", function(eventData) {
-                        
-            var posx = enemy.x+10;
-
-            if(enemy.x > player.x){
-                    enemydirection = -1;
-                                  posx = posx -340;
-
-                                       enemygunfire.flip("X")
-
-                                              enemy.flip("X");
-
-        } else {
-                                                                enemydirection = 1;
-                                                enemygunfire.unflip("X")
-
-         
-            enemy.unflip("X");
-        }
-            if(eventData.frame % 100 == 0 
-               && (-Crafty.viewport._x) < enemy.x +133
-               && (-Crafty.viewport._x + (Crafty.viewport._width / Crafty.viewport._scale)) > enemy.x 
-               && difference(player.y, enemy.y) < 200){
-                
-                shoot(enemy,enemydirection, enemygunfire, "Player")
-            }
-var distance = difference(player.x, enemy.x);
-if(distance > 600 || distance < 250){
-                enemy.velocity().x = 0;
-            } 
-            else 
-            if(enemy.x > player.x && distance > 250 && followplayer){
-                enemy.velocity().x = -160;
-            } else if(enemy.x < player.x && distance > 250 && followplayer){
-                                enemy.velocity().x = 160;
-
-            }
-                 
-                 enemygunfire.attr({x: posx, y: enemy.y-28})
-
-		  });
-            enemy.bind("Move", function(oldPosition){
-                       if(!enemy.isPlaying() && oldPosition._x != enemy.x){
-            		  		  enemy.animate('EnemyRunning', 0.5, 0, 1, 6); // setup animation
-                           
-              
-                 
-		  }
-             
-                   });
-
-        }
-        
-        
-
-        
-        
 	     /* Floors */
 		 Crafty.e('Floor, 2D, Canvas, Color, Persist')
 		  .attr({x: 0, y: 500, w: 6000, h: 10})
@@ -179,12 +84,22 @@ Crafty.e("2D, DOM, Color, solid, left")
 		  function spawnTram(disx, disy){
               var tramfloor = Crafty.e('Floor, 2D, Canvas, Color, Motion, Floor')
 		  .attr({x: disx+55, y: disy+57+83, w: 770, h: 0})
-              tramfloor.velocity().x = 80;
+              tramfloor.velocity().x = -80;
+              tramfloor.bind("Moved", function(oldPosition) {
+				if(tramfloor.x < 300){
+					tramfloor.velocity().x = 0;
+					}
+			  });
               
               var tram = Crafty.e('2D, Canvas, tram, Motion')
 		  .attr({x: disx, y: disy+83})
 		var speed = tram.velocity(); //returns the speed object
-			speed.x = 80;   // set the speed in the x direction
+			speed.x = -80;   // set the speed in the x axis
+			tram.bind("Moved", function(oldPosition) {
+				if(tram.x < 300){
+					tram.velocity().x = 0;
+					}
+			  });
               return tram;
               
           }
@@ -212,7 +127,39 @@ Crafty.e("2D, DOM, Color, solid, left")
       .attr({x: 1000, y: -200, w: 1, h: 646})
       .color();
       							player.x = 0;
+      							healthbar.x = 0;
+      							        SpawnEnemy(400, 100, false);
+
 });
+Crafty.defineScene("SceneLost", function() {
+							Crafty.background('#FFFFFF url(lost.jpg) repeat ');
+							Crafty.e("2D, DOM, Color, solid, left");
+							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 330, y: 180})
+			.text("Robbery failed")
+			.textFont({size: '60px', family: 'Arial', weight: 'bold'})
+			.textColor('red');
+							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 60, y: 280})
+			.text("You failed in your attempt to rob user *Username* and his gang, therefore you lost 200 credits!")
+			.textFont({size: '20px', family: 'Arial', weight: 'bold'})
+			.textColor('white');
+
+		});
+
+Crafty.defineScene("SceneWon", function() {
+	player.destroy();
+							Crafty.background('#FFFFFF url(won.jpg) repeat ');
+							Crafty.e("2D, DOM, Color, solid, left");
+							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 130, y: 180})
+			.text("Robbery succeeded")
+			.textFont({size: '60px', family: 'Arial', weight: 'bold'})
+			.textColor('green');
+							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 130, y: 280})
+			.text("You robbed *Username* and took 200 points of him")
+			.textFont({size: '20px', family: 'Arial', weight: 'bold'})
+			.textColor('white');
+
+		});
+
 		  		Crafty.enterScene("Scene1");
 		  		
 		  		
@@ -224,7 +171,7 @@ Crafty.e("2D, DOM, Color, solid, left")
 
 		  			var direction = 1; //direction 1 = right, 0 is left
         var playerhealth = 5;
-		  			var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard, Persist, WiredHitBox')
+		  			var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard, Persist')
 		  .attr({x: 200, y: 350, w:150, h: 150})
 		  .twoway(200)
 		  .gravity('Floor')
@@ -234,7 +181,7 @@ Crafty.e("2D, DOM, Color, solid, left")
         player.canLand = false;
     }
 });
-		  		        var healthbar = gethealthbar(player);
+		  		        healthbar = gethealthbar(player);
 player.origin("Center");
 player.z = 200;
 
@@ -280,6 +227,7 @@ if( difference(entity[0].obj.x, this.x) <100 ){
         healthbar.color(color);
         if(playerhealth < 1 ){
         this.destroy();
+        Crafty.enterScene("SceneLost");
             }
     
                     entity[0].obj.destroy();
@@ -403,10 +351,6 @@ return player;
 	return 'rgb('+red+','+green+','+blue+')';
 }
 
-		
-		 
-
-
         function gethealthbar(entity){
             var bar = Crafty.e("2D, DOM, Color, right")
       .attr({x: entity.x, y: entity.y, w: 100, h: 10})
@@ -435,4 +379,95 @@ return player;
 		        }
 		})
 	}
+	function SpawnEnemy(x, y, followplayer){
+
+            var enemydirection = -1;
+            var health = 3;
+            enemiesalive++;
+            var enemy = Crafty.e('2D, DOM, EnemySprite, Twoway, Gravity,SpriteAnimation, Collision, solid, GroundAttacher')
+
+		  .attr({x: x, y: y, w:150, h: 150})
+                        .collision([70,0,70,130,80,130,80,0])
+
+		  .gravity('Floor')
+        .gravityConst(1000)
+        .reel('EnemyRunning', 1000, 0, 0, 5);
+            enemy.checkHits('Enemy');
+    enemy.onHit('Enemy', function(entity){
+
+
+                    health--;
+        
+        enemyhealthbar.attr({w: health*20});
+        var color = redYellowGreen(0, 100,health*20);
+        enemyhealthbar.color(color);
+            if(health < 1 ){
+        this.destroy();
+        enemiesalive--;
+        if(Crafty._current == "Scene2" && enemiesalive == 0){
+			Crafty.enterScene("SceneWon");
+			}
+        
+            }
+    
+                    entity[0].obj.destroy();
+    });
+                         var enemyhealthbar = gethealthbar(enemy);
+
+                        		  var enemygunfire = getgunfire(enemy, enemydirection);
+
+         
+        enemy.bind("EnterFrame", function(eventData) {
+                        
+            var posx = enemy.x+10;
+
+            if(enemy.x > player.x){
+                    enemydirection = -1;
+                                  posx = posx -340;
+
+                                       enemygunfire.flip("X")
+
+                                              enemy.flip("X");
+
+        } else {
+                                                                enemydirection = 1;
+                                                enemygunfire.unflip("X")
+
+         
+            enemy.unflip("X");
+        }
+            if(eventData.frame % 100 == 0 
+               && (-Crafty.viewport._x) < enemy.x +133
+               && (-Crafty.viewport._x + (Crafty.viewport._width / Crafty.viewport._scale)) > enemy.x 
+               && difference(player.y, enemy.y) < 200){
+                
+                shoot(enemy,enemydirection, enemygunfire, "Player")
+            }
+var distance = difference(player.x, enemy.x);
+if(distance > 600 || distance < 250){
+                enemy.velocity().x = 0;
+            } 
+            else 
+            if(enemy.x > player.x && distance > 250 && followplayer){
+                enemy.velocity().x = -160;
+            } else if(enemy.x < player.x && distance > 250 && followplayer){
+                                enemy.velocity().x = 160;
+
+            }
+                 
+                 enemygunfire.attr({x: posx, y: enemy.y-28})
+
+		  });
+            enemy.bind("Move", function(oldPosition){
+                       if(!enemy.isPlaying() && oldPosition._x != enemy.x){
+            		  		  enemy.animate('EnemyRunning', 0.5, 0, 1, 6); // setup animation
+                           
+              
+                 
+		  }
+             
+                   });
+
+        }
+		  		
 
