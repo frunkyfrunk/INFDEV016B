@@ -46,7 +46,7 @@ Crafty.sprite(472,99, "bullet.png", {
     Building1: [0,0]
     });
 Crafty.audio.add("backgroundMusic", [
-"titletrack.wav",
+"titletrack.mp3",
 ]);
 var player;
 var healthbar;
