@@ -3,6 +3,24 @@
 * Crafty JS
 * Author: Frank A. Verhagen
 */
+
+//TODO: Use real data in this array
+var users = [
+    {username: "Frunkyjunk", money: 10000},
+    {username: "Mertesacker", money: 10000},
+    {username: "JohannesBo$$", money: 10000}
+];
+var usertable = "<style> table { font-family: arial, sans-serif; border-collapse: collapse; width: 100%; font-size:20px;} td, th { border: 1px solid #dddddd; text-align: center; padding: 8px; min-width:180px;} tr { background-color: #b38e7e; } .myclass { display:inline-block; width: 80px; height: 40px; background-color:#957669; color:white;} </style><table style='color:white;'>"
+  +"<tr>"
+    +"<th>Username</th><th>Money</th>";
+
+for(var i = 0; i < users.length; i++){
+    usertable += "<tr>"
+    +"<td>"+users[i].username+"</td><td>"+users[i].money+"</td><td><input class='myclass' type='button' onClick=rob('"+users[i].username+"') value='Rob'/></td>"
+  +"</tr>";
+}
+usertable+="</table>";
+var robbeduser = null;
 var enemiesalive = 0;
 Crafty.sprite(472,99, "bullet.png", {
     Bullet: [0,0]
@@ -24,15 +42,27 @@ Crafty.sprite(472,99, "bullet.png", {
 		Truck: [0,0]
 		});
         
-        Crafty.sprite(128, 128,"tire.png", {
-		Tire: [0,0]
-		});
         Crafty.sprite(888,244,"building.png", {
     Building1: [0,0]
     });
+Crafty.audio.add("backgroundMusic", [
+"titletrack.wav",
+]);
 var player;
 var healthbar;
-		
+		Crafty.defineScene("SceneStart", function() {
+            
+		Crafty.init(1000, 600, document.getElementById('game'));
+		Crafty.background('#FFFFFF url(startbg.png) repeat');
+            Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 50, y: 40})
+			.text("Select a player to rob")
+			.textFont({size: '60px', family: 'Arial', weight: 'bold'})
+			.textColor('white');
+            Crafty.audio.play("backgroundMusic", -1);
+            Crafty.e("HTML")
+   .attr({x:50, y:130, w:100, h:100})
+   .append(usertable)
+        });
         Crafty.defineScene("Scene1", function() {
 		Crafty.init(1000, 600, document.getElementById('game'));
 		Crafty.background('#FFFFFF url(bg.png) repeat');
@@ -49,9 +79,16 @@ var healthbar;
         		 
         SpawnEnemy(850, 300, false);
         SpawnEnemy(1200, 100, false);
-        SpawnEnemy(1200, 280, false);
+        SpawnEnemy(1700, 280, false);
+        SpawnEnemy(2100, 280, true);
+                    SpawnEnemy(2500, 280, true);
+                                SpawnEnemy(3000, 280, true);
+                                SpawnEnemy(3500, 280, false);
+
+
+
 		
- var truck = spawnObject(1200, 383, 246, 121, "Truck");
+ var truck = spawnObject(1700, 383, 246, 121, "Truck");
         var door = Crafty.e('2D, DOM, Color, Door').attr({x: 3326, y: 256+83, w: 80, h: 100}).color('#000000');
         door.z = 0;
                 
@@ -110,9 +147,6 @@ Crafty.e("2D, DOM, Color, solid, left")
                    Crafty.audio.add("shot", [
 "shot.wav"
 ]);
-        Crafty.audio.add('auw', [
-            "auw.wav"
-        ])
         
         
 			 
@@ -127,8 +161,12 @@ Crafty.e("2D, DOM, Color, solid, left")
       .attr({x: 1000, y: -200, w: 1, h: 646})
       .color();
       							player.x = 0;
-      							healthbar.x = 0;
-      							        SpawnEnemy(400, 100, false);
+      							healthbar = gethealthbar(player);
+      							        SpawnEnemy(400, 300, false);
+                    Crafty.e("2D, Canvas, Text").attr({x: 330, y: 300})
+			.text("This is " + robbeduser +", kill that sucka!")
+			.textFont({size: '20px', family: 'Arial', weight: 'bold'})
+			.textColor('white');
 
 });
 Crafty.defineScene("SceneLost", function() {
@@ -139,9 +177,11 @@ Crafty.defineScene("SceneLost", function() {
 			.textFont({size: '60px', family: 'Arial', weight: 'bold'})
 			.textColor('red');
 							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 60, y: 280})
-			.text("You failed in your attempt to rob user *Username* and his gang, therefore you lost 200 credits!")
+			.text("You failed in your attempt to rob user "+robbeduser+" and his gang, therefore you lost 200 credits!")
 			.textFont({size: '20px', family: 'Arial', weight: 'bold'})
 			.textColor('white');
+        //TODO: Take money from the player for losing and give it to the robbed player 
+
 
 		});
 
@@ -153,15 +193,20 @@ Crafty.defineScene("SceneWon", function() {
 			.text("Robbery succeeded")
 			.textFont({size: '60px', family: 'Arial', weight: 'bold'})
 			.textColor('green');
+    Crafty.audio.add("Succeeded", [
+"succeeded.wav",
+]);
+    Crafty.audio.play("Succeeded");
 							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 130, y: 280})
-			.text("You robbed *Username* and took 200 points of him")
+			.text("You robbed "+robbeduser+" and took 200 points of him")
 			.textFont({size: '20px', family: 'Arial', weight: 'bold'})
 			.textColor('white');
+    //TODO: Give player money for winning and subtract it from the robbed player
 
 		});
 
-		  		Crafty.enterScene("Scene1");
-		  		
+		  				  		Crafty.enterScene("SceneStart");
+
 		  		
 		  		
 		  		
@@ -189,7 +234,6 @@ player.reel('PlayerRunning', 800, 1, 0, 6) // setup animation
            		  var gunfire = getgunfire(player, 1);
            		  gunfire.z = 3;
                         player.collision([95,0,95,134,50,134,50,80,70,0] );
-
 player.bind('Moved', function(evt){
 
         if (this.hit('solid')){
@@ -200,6 +244,7 @@ player.bind('Moved', function(evt){
 		  player.bind('KeyDown', function(e) {
     if(e.key == Crafty.keys.SPACE) {
         shoot(player, direction, gunfire, "Enemy")
+        
     } 
     if(e.key == Crafty.keys.LEFT_ARROW || e.key == Crafty.keys.A){
         player.flip("X");
@@ -220,7 +265,7 @@ player.bind('Moved', function(evt){
         player.jumper(1000, ['UP_ARROW', 'W']);
 
     player.onHit('Player', function(entity){
-if( difference(entity[0].obj.x, this.x) <100 ){
+if( difference(entity[0].obj.x, this.x) < 100 ){
                     playerhealth--;
         healthbar.attr({w: playerhealth*20});
         var color = redYellowGreen(0, 100,playerhealth*20);
@@ -234,7 +279,9 @@ if( difference(entity[0].obj.x, this.x) <100 ){
                     }
     });
     player.onHit('Door', function(entity){
+        if(enemiesalive == 0){
 				Crafty.enterScene("Scene2");
+        } 
     });
      player.bind("Move", function(oldPosition) {
 			  var posx = player.x;
@@ -470,4 +517,9 @@ if(distance > 600 || distance < 250){
 
         }
 		  		
+function rob(username){
+    robbeduser = username;
+    Crafty.audio.stop("backgroundMusic");
+    Crafty.enterScene("Scene1");
+}
 
