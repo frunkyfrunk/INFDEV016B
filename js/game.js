@@ -45,10 +45,15 @@ Crafty.sprite(472,99, "bullet.png", {
         Crafty.sprite(888,244,"building.png", {
     Building1: [0,0]
     });
+Crafty.sprite(116,347,"Ammo.png", {
+    Ammo: [0,0]
+    });
 Crafty.audio.add("backgroundMusic", [
 "titletrack.mp3",
 ]);
 var player;
+var playerhealth = 5;
+var Ammo = 5;
 var healthbar;
 		Crafty.defineScene("SceneStart", function() {
             
@@ -161,7 +166,9 @@ Crafty.e("2D, DOM, Color, solid, left")
       .attr({x: 1000, y: -200, w: 1, h: 646})
       .color();
       							player.x = 0;
-      							healthbar = gethealthbar(player);
+      							healthbar = gethealthbar(player, healthbar._color);
+                                healthbar.w = playerhealth*20;
+                    
       							        SpawnEnemy(400, 300, false);
                     Crafty.e("2D, Canvas, Text").attr({x: 330, y: 300})
 			.text("This is " + robbeduser +", kill that sucka!")
@@ -215,7 +222,7 @@ Crafty.defineScene("SceneWon", function() {
 		  		function getPlayer() {
 
 		  			var direction = 1; //direction 1 = right, 0 is left
-        var playerhealth = 5;
+        
 		  			var player = Crafty.e('2D, DOM, PlayerSprite, Twoway, Gravity,SpriteAnimation, Collision, Keyboard, Persist')
 		  .attr({x: 200, y: 350, w:150, h: 150})
 		  .twoway(200)
@@ -226,7 +233,7 @@ Crafty.defineScene("SceneWon", function() {
         player.canLand = false;
     }
 });
-		  		        healthbar = gethealthbar(player);
+		  		        healthbar = gethealthbar(player , 'green');
 player.origin("Center");
 player.z = 200;
 
@@ -242,7 +249,8 @@ player.bind('Moved', function(evt){
       });
 
 		  player.bind('KeyDown', function(e) {
-    if(e.key == Crafty.keys.SPACE) {
+    if(e.key == Crafty.keys.SPACE && Ammo != 0) {
+        Ammo--;
         shoot(player, direction, gunfire, "Enemy")
         
     } 
@@ -316,7 +324,10 @@ if( difference(entity[0].obj.x, this.x) < 100 ){
               
           
 });
-        player.bind('EnterFrame', function(){
+        player.bind('EnterFrame', function(eventData){
+            if(Ammo < 5 && eventData.frame % 30 == 0 ){
+                Ammo++;
+            }
             if(!player.isPlaying()){
               player.sprite(0, 0);
           }
@@ -398,11 +409,17 @@ return player;
 	return 'rgb('+red+','+green+','+blue+')';
 }
 
-        function gethealthbar(entity){
+        function gethealthbar(entity, color){
+            
             var bar = Crafty.e("2D, DOM, Color, right")
-      .attr({x: entity.x, y: entity.y, w: 100, h: 10})
-      .color('green');
+      .attr({x: entity.x, y: entity.y, w: 100, h: 10});
+      bar.color(color);
             entity.bind('Move', function(evt){
+                
+                bar.attr({x: entity.x+30, y: entity.y-20})
+                
+            });
+            entity.bind('Moved', function(evt){
                 
                 bar.attr({x: entity.x+30, y: entity.y-20})
                 
@@ -459,7 +476,7 @@ return player;
     
                     entity[0].obj.destroy();
     });
-                         var enemyhealthbar = gethealthbar(enemy);
+                         var enemyhealthbar = gethealthbar(enemy, 'green');
 
                         		  var enemygunfire = getgunfire(enemy, enemydirection);
 
