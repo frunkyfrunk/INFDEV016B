@@ -1,0 +1,21 @@
+{
+  "name": "crafty-snake",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "mocha -r jsdom-global/register"
+  },
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-coffee": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-less": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-css": "latest",
+    "grunt-html-build": "latest",
+    "grunt-mocha": "latest",
+    "jsdom": "9.9.1",
+    "jsdom-global": "2.1.1"
+  }
+}

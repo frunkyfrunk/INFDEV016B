@@ -22,34 +22,34 @@ for(var i = 0; i < users.length; i++){
 usertable+="</table>";
 var robbeduser = null;
 var enemiesalive = 0;
-Crafty.sprite(472,99, "bullet.png", {
+Crafty.sprite(472,99, "img/bullet.png", {
     Bullet: [0,0]
 });
         
-        	Crafty.sprite(472,99, "gunfire.png", {
+        	Crafty.sprite(472,99, "img/gunfire.png", {
     Gunfire: [150,150]
 });
-        Crafty.sprite(350,350, "enemy.png", {
+        Crafty.sprite(350,350, "img/enemy.png", {
     EnemySprite: [0,0]
 });
-		Crafty.sprite(650,650, "gangster.png", {
+		Crafty.sprite(650,650, "img/gangster.png", {
     PlayerSprite: [0,0]
 });
-		Crafty.sprite(891, 150,"tram.png", {
+		Crafty.sprite(891, 150,"img/tram.png", {
 		tram: [0,0]
 		});
-        Crafty.sprite(986, 487,"truck.png", {
+        Crafty.sprite(986, 487,"img/truck.png", {
 		Truck: [0,0]
 		});
         
-        Crafty.sprite(888,244,"building.png", {
+        Crafty.sprite(888,244,"img/building.png", {
     Building1: [0,0]
     });
-Crafty.sprite(116,347,"Ammo.png", {
+Crafty.sprite(116,347,"img/Ammo.png", {
     Ammo: [0,0]
     });
 Crafty.audio.add("backgroundMusic", [
-"titletrack.mp3",
+"audio/titletrack.mp3",
 ]);
 var player;
 var playerhealth = 5;
@@ -58,7 +58,7 @@ var healthbar;
 		Crafty.defineScene("SceneStart", function() {
             
 		Crafty.init(1000, 600, document.getElementById('game'));
-		Crafty.background('#FFFFFF url(startbg.png) repeat');
+		Crafty.background('#FFFFFF url(img/startbg.png) repeat');
             Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 50, y: 40})
 			.text("Select a player to rob")
 			.textFont({size: '60px', family: 'Arial', weight: 'bold'})
@@ -70,7 +70,7 @@ var healthbar;
         });
         Crafty.defineScene("Scene1", function() {
 		Crafty.init(1000, 600, document.getElementById('game'));
-		Crafty.background('#FFFFFF url(bg.png) repeat');
+		Crafty.background('#FFFFFF url(img/bg.png) repeat');
 
     player = getPlayer();
 
@@ -150,14 +150,14 @@ Crafty.e("2D, DOM, Color, solid, left")
          
                    
                    Crafty.audio.add("shot", [
-"shot.wav"
+"audio/shot.wav"
 ]);
         
         
 			 
         });
                 Crafty.defineScene("Scene2", function() {
-							Crafty.background('#FFFFFF url(indoorbg.png) repeat');
+							Crafty.background('#FFFFFF url(img/indoorbg.png) repeat');
 							Crafty.e("2D, DOM, Color, solid, left")
 
       .attr({x: -1, y: -200, w: 1, h: 646})
@@ -177,7 +177,7 @@ Crafty.e("2D, DOM, Color, solid, left")
 
 });
 Crafty.defineScene("SceneLost", function() {
-							Crafty.background('#FFFFFF url(lost.jpg) repeat ');
+							Crafty.background('#FFFFFF url(img/lost.jpg) repeat ');
 							Crafty.e("2D, DOM, Color, solid, left");
 							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 330, y: 180})
 			.text("Robbery failed")
@@ -194,14 +194,14 @@ Crafty.defineScene("SceneLost", function() {
 
 Crafty.defineScene("SceneWon", function() {
 	player.destroy();
-							Crafty.background('#FFFFFF url(won.jpg) repeat ');
+							Crafty.background('#FFFFFF url(img/won.jpg) repeat ');
 							Crafty.e("2D, DOM, Color, solid, left");
 							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 130, y: 180})
 			.text("Robbery succeeded")
 			.textFont({size: '60px', family: 'Arial', weight: 'bold'})
 			.textColor('green');
     Crafty.audio.add("Succeeded", [
-"succeeded.wav",
+"audio/succeeded.wav",
 ]);
     Crafty.audio.play("Succeeded");
 							Crafty.e("2D, Canvas, Text").attr({w: 200, h: 50, x: 130, y: 280})
