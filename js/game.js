@@ -5,6 +5,10 @@
 */
 
 //TODO: Use real data in this array
+
+Crafty.defineScene("bankoverval", function () {
+
+
 var users = [
     {username: "Frunkyjunk", money: 10000},
     {username: "Mertesacker", money: 10000},
@@ -16,7 +20,7 @@ var usertable = "<style> table { font-family: arial, sans-serif; border-collapse
 
 for(var i = 0; i < users.length; i++){
     usertable += "<tr>"
-    +"<td>"+users[i].username+"</td><td>"+users[i].money+"</td><td><input class='myclass' type='button' onClick=rob('"+users[i].username+"') value='Rob'/></td>"
+    +"<td>"+users[i].username+"</td><td>"+users[i].money+"</td><td><input class='myclass rob' type='button' id='"+users[i].username+"' value='Rob'/></td>"
   +"</tr>";
 }
 usertable+="</table>";
@@ -534,9 +538,11 @@ if(distance > 600 || distance < 250){
 
         }
 		  		
-function rob(username){
-    robbeduser = username;
+$(".rob").click(function () {    
+    robbeduser = $(this).id;
     Crafty.audio.stop("backgroundMusic");
     Crafty.enterScene("Scene1");
-}
+});
 
+});
+Crafty.enterScene("bankoverval");
