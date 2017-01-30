@@ -1,10 +1,13 @@
 module.exports = {
 	importHitman: function () {
+		
+		var app = require('../app');
 
-		var User = require('./models/user')
-			/*-------------------------------------------------------*/
-			//Mongoose
-			mongoose.connect('mongodb://localhost:27017/DEV016B');
+		var User = require('../models/user')
+		
+		/*-------------------------------------------------------*/
+		//Mongoose
+		mongoose.connect('mongodb://localhost:27017/DEV016B');
 		var db = mongoose.connection;
 
 		db.on('error', console.error.bind(console, 'connection error:'));
@@ -14,18 +17,8 @@ module.exports = {
 
 		/*------------------------------------------------------*/
 		//Hitman page
-		app.get('/hitman', (req, res) => {
-			res.sendfile('public/Hitman.html');
-		})
-
 		app.post('/reward/:username', (req, res) => {
-			var username;
-
-			if (req.params.username == null) {
-				username = req.body.player;
-			} else {
-				username = req.params.username;
-			}
+			var username = app.locals.login;
 
 			rewardPlayer(username);
 
