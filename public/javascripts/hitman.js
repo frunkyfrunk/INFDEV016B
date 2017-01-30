@@ -231,7 +231,7 @@
 			url: '/reward',
 			type: 'POST',
 			cache: false, 
-			data: { player: $("#usernameText").val()}, 
+			data: { player: usernameText}, 
 		        success: function(data) {
 		          console.log(data);
 		          console.log('process sucess');
