@@ -143,7 +143,7 @@ describe('Database Tests', function() {
     describe('Check if Script files are in /js folder', function() {
   describe('Check crafty.js', function() {
     it('Should find crafty.js', function(done) {
-      fs.exists('./public/javascripts/crafsty.js',function(exists){
+      fs.exists('./public/javascripts/crafty.js',function(exists){
     if(exists){
 	    done();
     }
