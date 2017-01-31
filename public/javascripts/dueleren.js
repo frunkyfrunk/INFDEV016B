@@ -1,17 +1,19 @@
 Crafty.init(1000,600, document.getElementById('game'));
 
+
+
 Crafty.defineScene("dueleren", function() {
-	var socket = io();
+	socket.emit('JoinDueleren');
 	var random = Math.random();
 	var socketID; 
 	var player_list = {};
 	var bullet_list = {};
 	var clientPlayer;
 	
-	Crafty.sprite(75, 96, "client/img/playersprite.png", {Player:[0,0]})
+	Crafty.sprite(75, 96, "img/playersprite.png", {Player:[0,0]})
 	var bg = Crafty.e('2D, Canvas, Image')
     .attr({x: 0,y: 0, w:3200, h:3200})
-	.image("client/img/background_dueleren.png");
+	.image("img/background_dueleren.png");
 	
 	
 	class Bullet {
@@ -19,7 +21,7 @@ Crafty.defineScene("dueleren", function() {
 			this._id = data.id;
 			this._bullet = new Crafty.e("2D, Canvas, Image, Collision")
 			.attr({x:data.x, y:data.y, w:10, h:10})
-			.image("client/img/bullet2.png", "repeat");
+			.image("img/bullet.png", "repeat");
 		}
 	}
 	
@@ -281,7 +283,12 @@ class Player {
 Crafty.defineScene("Duel_Lose", function(){
 	var bg = Crafty.e('2D, Canvas, Image')
     .attr({x: 0,y: 0, w:1000, h:650})
-	.image("client/img/thisisyou.jpg");
+	.image("img/thisisyou.jpg");
+	
+	socket.emit('punishUser', {
+					username: usernameText.value,
+					amount: 500
+				});
 	
 	var loserText = Crafty.e("2D, Canvas, Text")
 		.attr({
@@ -294,9 +301,9 @@ Crafty.defineScene("Duel_Lose", function(){
 			weight: 'bold'
 		})
 		.textColor("#FFF)00");
-		
+	
 	setTimeout(function(){
 		Crafty.enterScene("menu");
-	},3500);
+	}, 2500);
 
 });

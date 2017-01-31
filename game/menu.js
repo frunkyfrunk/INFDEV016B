@@ -5,10 +5,68 @@ module.exports = {
 		var create_response;
 		var log_response;
 		var ENEMY_LIST = {};
+		var SOCKET_LIST_DUELEREN = {};
+		var PLAYER_LIST_DUELEREN = {};
+		var BULLET_LIST_DUELEREN = {};
+		var VELOCITY_LIST = {
+			0: {
+				x: 0,
+				y: -1
+			}, // up
+			45: {
+				x: 1,
+				y: -1
+			}, // up-right
+			315: {
+				x: -1,
+				y: -1
+			}, //up-left
+			180: {
+				x: 0,
+				y: 1
+			}, //down
+			135: {
+				x: 1,
+				y: 1
+			}, //down-right
+			225: {
+				x: -1,
+				y: 1
+			}, //down-left
+			90: {
+				x: 1,
+				y: 0
+			}, //right
+			270: {
+				x: -1,
+				y: 0
+			} //left
+		};
 
 		io.on('connection', function (socket) {
 			SOCKET_LIST[socket.id] = socket;
 			PLAYER_LIST.push(socket.id);
+
+			socket.on('JoinDueleren', function () {
+				SOCKET_LIST_DUELEREN[socket.id] = socket;
+
+				var player = new Player(socket.id);
+				PLAYER_LIST_DUELEREN[socket.id] = player;
+
+				onConnect(socket.id);
+			});
+			
+
+			socket.on('keyPress', function (data) {
+				var player = PLAYER_LIST_DUELEREN[socket.id]
+				if(player != undefined)
+				player.updateState(data.inputId);
+			});
+			socket.on('playerAngle', function (data) {
+				var player = PLAYER_LIST_DUELEREN[socket.id]
+				if(player != undefined)
+				player._angle = data;
+			});
 
 			getTopPlayers();
 			var timer_hitman = 0;
@@ -61,6 +119,7 @@ module.exports = {
 				socket.broadcast.emit('onlinePlayersUpdate', {
 					onlinePlayers: PLAYER_LIST.length
 				});
+				PlayerRemove(socket.id);
 			});
 
 			socket.on('clientGameTimes', function (data) {
@@ -115,6 +174,21 @@ module.exports = {
 			});
 
 		});
+
+		setInterval(function () {
+
+			for (var i in SOCKET_LIST_DUELEREN) {
+				var socket = SOCKET_LIST_DUELEREN[i];
+				socket.emit('newPositions', PlayersInitPackage());
+				socket.emit('bulletPositions', BulletPackage());
+			}
+
+		}, 1000 / 100);
+
+		function onConnect(socketID) {
+			var socket = SOCKET_LIST_DUELEREN[socketID];
+			socket.emit('onConnect', socketID);
+		}
 
 		var User = require('../models/user');
 		var UserDetails;
@@ -218,6 +292,182 @@ module.exports = {
 					}
 				});
 		};
+
+		setInterval(function () {
+
+			for (var i in PLAYER_LIST_DUELEREN) {
+				var player = PLAYER_LIST_DUELEREN[i];
+				player.updatePosition();
+			}
+
+			for (var i in BULLET_LIST_DUELEREN) {
+				var bullet = BULLET_LIST_DUELEREN[i];
+				bullet.update();
+			}
+		}, 1000 / 30);
+
+		function PlayerRemove(socketID) {
+
+			var pack = socketID;
+			for (var i in SOCKET_LIST_DUELEREN) {
+				var socket = SOCKET_LIST_DUELEREN[i];
+				socket.emit('PlayerRemove', pack);
+			}
+			delete PLAYER_LIST_DUELEREN[socketID];
+			delete SOCKET_LIST_DUELEREN[socketID];
+			console.log("Player has been deleted with id " + socketID);
+		}
+
+		function PlayersInitPackage() {
+			var pack = [];
+			for (var i in PLAYER_LIST_DUELEREN) {
+				var player = PLAYER_LIST_DUELEREN[i];
+				pack.push({
+					hp: player._hp,
+					angle: player._angle,
+					state: player._state,
+					x: player._x,
+					y: player._y,
+					id: player._id
+				});
+			}
+			return pack;
+		};
+
+		function BulletPackage() {
+			var pack = [];
+			for (var i in BULLET_LIST_DUELEREN) {
+				var bullet = BULLET_LIST_DUELEREN[i];
+				pack.push({
+					player: bullet._playerId,
+					id: bullet._id,
+					x: bullet._x,
+					y: bullet._y
+				});
+			}
+			return pack;
+		}
+
+		class Player {
+			constructor(id) {
+				this._id = id;
+				this._x = Math.floor(Math.random() * 1700) + 750;
+				this._y = Math.floor(Math.random() * 1700) + 750;
+				this._hp = 5;
+				this._speed = 7;
+				this._state;
+				this._angle = 0;
+				this._timer = 0;
+				console.log("Player has been created with id " + this._id);
+			}
+
+			updateState(state) {
+				this._state = state;
+			}
+
+			updatePosition() {
+				if (this._state == "up-right") {
+					this._x += this._speed * 0.66;
+					this._y -= this._speed * 0.66;
+				} else if (this._state == "up-left") {
+					this._x -= this._speed * 0.66;
+					this._y -= this._speed * 0.66;
+				} else if (this._state == "down-right") {
+					this._x += this._speed * 0.66;
+					this._y += this._speed * 0.66;
+				} else if (this._state == "down-left") {
+					this._x -= this._speed * 0.66;
+					this._y += this._speed * 0.66;
+				} else if (this._state == "right")
+					this._x += this._speed;
+				else if (this._state == "left")
+					this._x -= this._speed;
+				else if (this._state == "up")
+					this._y -= this._speed;
+				else if (this._state == "down")
+					this._y += this._speed;
+				else if (this._state == "shoot") {
+					if (this._timer-- < 0) {
+						var pack = {
+							x: this._x,
+							y: this._y
+						};
+						var bulletId = Math.random();
+						var bullet = new Bullet(this._id, bulletId, pack, VELOCITY_LIST[this._angle]);
+						BULLET_LIST_DUELEREN[bulletId] = bullet;
+						this._timer = 5;
+					}
+				}
+
+				if (this._y <= 675)
+					this._y = 675
+
+						if (this._y >= 2550)
+							this._y = 2550
+
+								if (this._x <= 675)
+									this._x = 675
+
+										if (this._x >= 2550)
+											this._x = 2550
+			}
+
+			getPosition() {
+				var x = this._x;
+				var y = this._y;
+				return {
+					x: x,
+					y: y
+				};
+			}
+
+		}
+
+		class Bullet {
+			constructor(id, bulletId, position, vector) {
+				this._playerId = id;
+				this._id = bulletId;
+				this._damage = 1;
+				this._speedX = vector.x * 15;
+				this._speedY = vector.y * 15;
+				this._timer = 0;
+				this._x = position.x;
+				this._y = position.y;
+				console.log("Bullet has been created with id " + this._id);
+
+			}
+
+			getDistance(pt) {
+				return Math.sqrt(Math.pow(this._x - pt._x, 2) + Math.pow(this._y - pt._y, 2));
+			}
+
+			update() {
+				this._x += this._speedX;
+				this._y += this._speedY;
+				if (this._timer++ > 50) {
+					io.sockets.emit('BulletRemove', this._id);
+					console.log("Bullet has been deleted with id " + this._id);
+					delete BULLET_LIST_DUELEREN[this._id];
+
+				}
+
+				for (var i in PLAYER_LIST_DUELEREN) {
+					var p = PLAYER_LIST_DUELEREN[i];
+					if (this.getDistance(p) < 32 && p._id !== this._playerId) {
+						io.sockets.emit('BulletRemove', this._id);
+						p._hp -= 1;
+						delete BULLET_LIST_DUELEREN[this._id];
+
+						if (p._hp == 0) {
+							var socket = SOCKET_LIST_DUELEREN[p._id];
+							socket.emit("LeaveScene");
+							PlayerRemove(p._id);
+						}
+					}
+				}
+			}
+
+		}
 
 	}
 };
