@@ -16,9 +16,9 @@ Crafty.defineScene("Higherlower", function () {
 		h: 600
 	})
 	.append('<div class="col-md-12 text-center">'
-		 + '<input class="btn btn-warning pull-left nextlower" value="Lower" style="margin-top:350px; margin-left:200px; min-width:150px" type="submit">'
+		 + '<input class="btn btn-warning pull-left nextlower" value="Lower" style="margin-top:350px; margin-left:50px; min-width:150px" type="submit">'
 		 + '<input type="submit" class="btn btn-default" style="margin-top:350px; min-width:150px" id="number" value="3">'
-		 + '<input class="btn btn-warning pull-right nexthigher" value="Higher" style="margin-top:350px; margin-right:200px; min-width:150px" type="submit">'
+		 + '<input class="btn btn-warning pull-right nexthigher" value="Higher" style="margin-top:350px; margin-right:50px; min-width:150px" type="submit">'
 		 + '</div>');
 	$('#number').val(getRandomNumber());
 
