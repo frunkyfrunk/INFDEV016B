@@ -151,7 +151,7 @@ Crafty.defineScene("menu", function () {
 	.bind("MouseOut", function () {
 		this.image("images/bankoverval.png");
 	}).bind("Click", function () {
-		if (timer_bankoverval == "") {
+		if (timer_bankrobbery == "") {
 			Crafty.enterScene("bankoverval");
 			timer_bankrobbery = 300;
 			socket.emit('clientGameTimes', {
