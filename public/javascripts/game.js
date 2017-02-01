@@ -249,6 +249,7 @@ Crafty.defineScene("menu", function () {
 
 	setInterval(function playerMoneyTextFunction() {
 		playerMoneyText.text("Dolla: " + user_money);
+		//console.log(user_money);
 	}, 1000);
 
 	var hitmanTimerText = Crafty.e("2D, Canvas, Text")

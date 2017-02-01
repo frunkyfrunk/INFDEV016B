@@ -166,10 +166,11 @@ module.exports = {
 
 			socket.on('getPlayerMoney', function (data) {
 				getUser(data);
-				console.log(UserDetails.money);
-				socket.emit('playermoney', {
+				setTimeout(function(){
+					console.log(UserDetails.money);
+					socket.emit('playermoney', {
 					money: UserDetails.money
-
+				},2500);
 				});
 			});
 
